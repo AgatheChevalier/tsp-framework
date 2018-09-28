@@ -17,7 +17,7 @@ abstract public class AHeuristic {
 	
 	/** The data of the problem */
 	protected Instance m_instance;
-	
+	 
 	/** The solution built */
 	protected Solution m_solution;
 	
