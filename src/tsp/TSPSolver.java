@@ -81,7 +81,7 @@ public class TSPSolver {
 			}
 			m_solution.setCityPosition(0, m_instance.getNbCities());
 		}
-		
+		System.out.println("Le temps passé sur le problème est: "+tempspasse+" ms");
 	}
 
 	// -----------------------------
