@@ -77,10 +77,11 @@ public class TSPSolver {
 		while(tempspasse < m_timeLimit*1000) {
 			for(int i=1; i<m_instance.getNbCities();i++) {
 				m_solution.setCityPosition(i,i);
+				tempspasse = System.currentTimeMillis()-t;
 			}
 			m_solution.setCityPosition(0, 442);
-			tempspasse = System.currentTimeMillis() - t;
 		}
+		
 	}
 
 	// -----------------------------
