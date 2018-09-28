@@ -123,6 +123,7 @@ public class TSPSolver {
 	 * @param time time given to solve the problem
 	 */
 	public void setTimeLimit(long time) {
+		
 		this.m_timeLimit = time;
 	}
 
