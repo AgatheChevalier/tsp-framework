@@ -15,6 +15,8 @@ abstract public class AMetaheuristic {
 	// ----- ATTRIBUTS -------------
 	// -----------------------------
 
+	//ligne test 
+	
 	/** The data of the problem */
 	protected Instance m_instance;
 
