@@ -72,15 +72,15 @@ public class TSPSolver {
 		m_solution.print(System.err);
 		
 		// Example of a time loop
-		long startTime = System.currentTimeMillis();
-		long spentTime = 0;
-		do
-		{
-			// TODO
-			// Code a loop base on time here
-			spentTime = System.currentTimeMillis() - startTime;
-		}while(spentTime < (m_timeLimit * 1000 - 100) );
-		
+		long t = System.currentTimeMillis();
+		long tempspasse = 0;
+		while(tempspasse < m_timeLimit*1000) {
+			for(int i=1; i<m_instance.getNbCities();i++) {
+				m_solution.setCityPosition(i,i);
+			}
+			m_solution.setCityPosition(0, 442);
+			tempspasse = System.currentTimeMillis() - t;
+		}
 	}
 
 	// -----------------------------
