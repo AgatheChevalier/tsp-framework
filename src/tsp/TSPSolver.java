@@ -79,7 +79,7 @@ public class TSPSolver {
 				m_solution.setCityPosition(i,i);
 				tempspasse = System.currentTimeMillis()-t;
 			}
-			m_solution.setCityPosition(0, 442);
+			m_solution.setCityPosition(0, m_instance.getNbCities());
 		}
 		
 	}
