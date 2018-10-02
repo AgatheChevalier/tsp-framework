@@ -67,6 +67,7 @@ public class TSPSolver {
 	 * 
 	 * @throws Exception may return some error, in particular if some vertices index are wrong.
 	 */
+
 	public void solve() throws Exception
 	{
 		m_solution.print(System.err);
@@ -81,7 +82,6 @@ public class TSPSolver {
 			}
 			m_solution.setCityPosition(0, m_instance.getNbCities());
 		}
-		System.out.println("Le temps passé sur le problème est: "+tempspasse+" ms");
 	}
 
 	// -----------------------------
