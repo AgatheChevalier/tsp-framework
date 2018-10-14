@@ -75,11 +75,19 @@ public class TSPSolver {
 		// Example of a time loop
 		long t = System.currentTimeMillis();
 		long tempspasse = 0;
-		while(tempspasse < m_timeLimit*1000) {
-			for(int i=1; i<m_instance.getNbCities();i++) {
-				m_solution.setCityPosition(i,i);
-				tempspasse = System.currentTimeMillis()-t;
+		int compteur = 0;
+		while(compteur<100000) {
+			for(int i=0; i<m_instance.getNbCities()-1; i++) {
+				for(int j=0; j<m_instance.getNbCities()-1; j++) {
+					if(j!=i-1 && j!= i && j!=i+1) {
+						if(m_instance.getDistances(i,i+1)+m_instance.getDistances(j,j+1) > m_instance.getDistances(i, j)+m_instance.getDistances(i+1, j+1)) {
+							m_solution.setCityPosition(i,j);
+							m_solution.setCityPosition(i+1,j+1);
+						}
+					}
+				}
 			}
+			compteur++;
 			m_solution.setCityPosition(0, m_instance.getNbCities());
 		}
 	}
