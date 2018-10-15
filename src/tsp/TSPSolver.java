@@ -1,5 +1,9 @@
 package tsp;
 
+import java.util.ArrayList;
+
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
+
 /**
  * 
  * This class is the place where you should enter your code and from which you can create your own objects.
@@ -75,7 +79,7 @@ public class TSPSolver {
 		// Example of a time loop
 		long t = System.currentTimeMillis();
 		long tempspasse = 0;
-		boolean[] visite = new boolean[m_instance.getNbCities()];
+/*		boolean[] visite = new boolean[m_instance.getNbCities()];
 		visite[0] = true; 
 		while(tempspasse < m_timeLimit*100) {
 			int compteur=0;
@@ -97,7 +101,33 @@ public class TSPSolver {
 				compteur++;
 				tempspasse = System.currentTimeMillis()-t;
 			}
+		} */
+		
+		boolean[] villes = new boolean[m_instance.getNbCities()];
+		int ville_courante = 0;	
+		villes[ville_courante]=true;
+		m_solution.setCityPosition(ville_courante, 0);
+		int compteur=1;
+		while(compteur<m_instance.getNbCities()) {
+			int index = ville_courante;
+			while(villes[index]==true) {
+				index = (index+1)%villes.length;
+			}
+			long minimum = m_instance.getDistances(ville_courante, index);
+				int ville_proche = index;
+				for(int i=0; i<villes.length; i++) {
+					if(villes[i]==false && m_instance.getDistances(ville_courante,i)<minimum) {
+						minimum=m_instance.getDistances(ville_courante,i);
+						ville_proche=i;
+					}
+				}
+				villes[ville_proche]=true;
+				m_solution.setCityPosition(ville_proche, compteur);
+				ville_courante=ville_proche;
+				compteur++;
 		}
+		m_solution.setCityPosition(0,m_instance.getNbCities());
+
 	}
 	
 	
@@ -111,8 +141,9 @@ public class TSPSolver {
 			}
 		}
 		return villePlusProche;
-		
 	}
+	
+	
 
 	// -----------------------------
 	// ----- GETTERS / SETTERS -----
