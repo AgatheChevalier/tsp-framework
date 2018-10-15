@@ -75,20 +75,28 @@ public class TSPSolver {
 		// Example of a time loop
 		long t = System.currentTimeMillis();
 		long tempspasse = 0;
-		int compteur = 0;
-		while(compteur<100000) {
-			for(int i=0; i<m_instance.getNbCities()-1; i++) {
-				for(int j=0; j<m_instance.getNbCities()-1; j++) {
-					if(j!=i-1 && j!= i && j!=i+1) {
-						if(m_instance.getDistances(i,i+1)+m_instance.getDistances(j,j+1) > m_instance.getDistances(i, j)+m_instance.getDistances(i+1, j+1)) {
-							m_solution.setCityPosition(i,j);
-							m_solution.setCityPosition(i+1,j+1);
+		boolean[] visite = new boolean[m_instance.getNbCities()];
+		visite[0] = true; visite[1]=true;
+		while(tempspasse < m_timeLimit*100) {
+			int compteur=0;
+			int ville = 1;
+			m_solution.setCityPosition(1, 0);
+			while(compteur<m_instance.getNbCities()) {
+				for(int j=1; j<m_instance.getNbCities(); j++) {
+					if(j!=ville) {
+						long minimum=m_instance.getDistances(1,2);
+						int ville_suiv = 2;
+						if(visite[j]==false && m_instance.getDistances(ville,j)<minimum) {
+							minimum=m_instance.getDistances(ville, j);
+							ville_suiv = j;
 						}
+						visite[ville_suiv]=true;
+						m_solution.setCityPosition(ville_suiv, compteur+1);
 					}
 				}
+				compteur++;
+				tempspasse = System.currentTimeMillis()-t;
 			}
-			compteur++;
-			m_solution.setCityPosition(0, m_instance.getNbCities());
 		}
 	}
 
