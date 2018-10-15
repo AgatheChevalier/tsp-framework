@@ -100,25 +100,26 @@ public class TSPSolver {
 		} */
 		
 		boolean[] villes = new boolean[m_instance.getNbCities()];
-		int ville_courante = 0;	
-		villes[ville_courante]=true;
-		m_solution.setCityPosition(ville_courante, 0);
-		int compteur=1;
+		int ville_courante = 0;							//première ville indice 0
+		villes[ville_courante]=true; 					// ville 0 visitée
+		m_solution.setCityPosition(ville_courante, 0); 	//on part de ville 0
+		int compteur=1; 									//doit arriver au nb de villes
 		while(compteur<m_instance.getNbCities()) {
-			int index = ville_courante;
+			int index = ville_courante; 		//on va faire un minimum: il nous faut une distance "random" pour initialiser
+											// attention : on ne doit pas prendre une ville déjà visitée
 			while(villes[index]==true) {
-				index = (index+1)%villes.length;
+				index = (index+1)%villes.length; 		//permet de parcourir tout si besoin, sans sortie d'index
 			}
 			long minimum = m_instance.getDistances(ville_courante, index);
 				int ville_proche = index;
 				for(int i=0; i<villes.length; i++) {
-					if(villes[i]==false && m_instance.getDistances(ville_courante,i)<minimum) {
+					if(villes[i]==false && m_instance.getDistances(ville_courante,i)<minimum) { //tout ça peut être remplacé par méthode plusProcheVoisin
 						minimum=m_instance.getDistances(ville_courante,i);
 						ville_proche=i;
 					}
 				}
-				villes[ville_proche]=true;
-				m_solution.setCityPosition(ville_proche, compteur);
+				villes[ville_proche]=true;							// on visite la plus proche
+				m_solution.setCityPosition(ville_proche, compteur);  //on la place
 				ville_courante=ville_proche;
 				compteur++;
 		}
