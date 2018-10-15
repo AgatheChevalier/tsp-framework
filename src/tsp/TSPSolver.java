@@ -77,36 +77,29 @@ public class TSPSolver {
 		long tempspasse = 0;
 		boolean[] visite = new boolean[m_instance.getNbCities()];
 		visite[0] = true; 
+		
 		while(tempspasse < m_timeLimit*100) {
+			m_solution.setCityPosition(1, 0);
 			int compteur=0;
 			int ville = 1;
-			m_solution.setCityPosition(1, 1);
-			while(compteur<m_instance.getNbCities()-1) {
-				for(int j=1; j<m_instance.getNbCities(); j++) {
-					int ville_suiv=j+1;
-					if(j!=ville) {
-						long minimum=m_instance.getDistances(ville,j);
-						if(visite[j-1]==false && m_instance.getDistances(ville,j)<minimum) {
-							minimum=m_instance.getDistances(ville, j);
-							ville_suiv = j;
-						}
-						visite[ville_suiv-1]=true;
-						m_solution.setCityPosition(ville_suiv, compteur);
-					}
-				}
+			while(compteur<m_instance.getNbCities()) {
+				int ville_suiv=plusProcheVoisin(ville,visite);
+				visite[ville_suiv]=true;
+				m_solution.setCityPosition(ville_suiv, compteur);
 				compteur++;
+				ville=ville_suiv;
 				tempspasse = System.currentTimeMillis()-t;
 			}
 		}
 	}
 	
 	
-	public int plusProcheVoisin(int ville) throws Exception {
+	public int plusProcheVoisin(int ville,boolean[] lesVilles) throws Exception {
 		int villePlusProche=ville+1;
 		long minimum= m_instance.getDistances(ville, villePlusProche);
-		for (int i=1; i<m_instance.getNbCities(); i++) {
-			if (m_instance.getDistances(ville, i)<minimum) {
-				minimum=m_instance.getDistances(ville,i);
+		for (int i=0; i<m_instance.getNbCities(); i++) {
+			if (m_instance.getDistances(ville-1, i)<minimum && lesVilles[i]==false) {
+				minimum=m_instance.getDistances(ville-1,i);
 				villePlusProche=i;
 			}
 		}
