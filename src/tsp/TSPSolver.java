@@ -89,6 +89,9 @@ public class TSPSolver {
 				compteur++;
 				ville=ville_suiv;
 				tempspasse = System.currentTimeMillis()-t;
+				if (compteur==m_instance.getNbCities()) { // si toutes les villes ont ete parcourues, retour a la ville 0
+					ville_suiv=0;
+				}
 			}
 		}
 	}
