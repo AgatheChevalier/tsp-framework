@@ -99,6 +99,20 @@ public class TSPSolver {
 			}
 		}
 	}
+	
+	
+	public int plusProcheVoisin(int ville) throws Exception {
+		int villePlusProche=ville+1;
+		long minimum= m_instance.getDistances(ville, villePlusProche);
+		for (int i=1; i<m_instance.getNbCities(); i++) {
+			if (m_instance.getDistances(ville, i)<minimum) {
+				minimum=m_instance.getDistances(ville,i);
+				villePlusProche=i;
+			}
+		}
+		return villePlusProche;
+		
+	}
 
 	// -----------------------------
 	// ----- GETTERS / SETTERS -----
