@@ -74,11 +74,14 @@ public class TSPSolver {
 
 	public void solve() throws Exception
 	{
-		m_solution.print(System.err);
+		plusProcheVoisin();    // choisir méthode qu'on teste ici
+		
+		
+	
 		
 		// Example of a time loop
 		long t = System.currentTimeMillis();
-		long tempspasse = 0;
+		long tempspasse = 0;}
 /*		boolean[] visite = new boolean[m_instance.getNbCities()];
 		visite[0] = true; 
 		
@@ -98,6 +101,19 @@ public class TSPSolver {
 				}
 			}
 		} */
+		
+	
+	
+	
+	/** Méthode du plus proche voisin
+	 * Pour la tester, mettre le nom de la méthode dans solve ci dessus
+	 * 
+	 * @throws Exception
+	 */
+	
+		
+	public void plusProcheVoisin() throws Exception {
+		m_solution.print(System.err);
 		
 		boolean[] villes = new boolean[m_instance.getNbCities()];
 		int ville_courante = 0;							//première ville indice 0
@@ -124,15 +140,21 @@ public class TSPSolver {
 				compteur++;
 		}
 		m_solution.setCityPosition(0,m_instance.getNbCities());
+		//il faut calculer la distance totale aussi
 
 	}
-	
-	
+
+	/** Algorithme qui trouve le plus proche voisin d'une seule ville
+	 * @param ville
+	 * @param lesVilles : tableau boolean pour savoir si déjà visitée ou non
+	 * @return
+	 * @throws Exception
+	 */
 	public int plusProcheVoisin(int ville,boolean[] lesVilles) throws Exception {
 		int villePlusProche=ville+1;
 		long minimum= m_instance.getDistances(ville, villePlusProche);
 		for (int i=0; i<m_instance.getNbCities(); i++) {
-			if (m_instance.getDistances(ville-1, i)<minimum && lesVilles[i]==false) {
+			if (m_instance.getDistances(ville, i)<minimum && lesVilles[i]==false) {
 				minimum=m_instance.getDistances(ville-1,i);
 				villePlusProche=i;
 			}
