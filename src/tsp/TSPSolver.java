@@ -76,22 +76,22 @@ public class TSPSolver {
 		long t = System.currentTimeMillis();
 		long tempspasse = 0;
 		boolean[] visite = new boolean[m_instance.getNbCities()];
-		visite[0] = true; visite[1]=true;
+		visite[0] = true; 
 		while(tempspasse < m_timeLimit*100) {
 			int compteur=0;
 			int ville = 1;
-			m_solution.setCityPosition(1, 0);
-			while(compteur<m_instance.getNbCities()) {
+			m_solution.setCityPosition(1, 1);
+			while(compteur<m_instance.getNbCities()-1) {
 				for(int j=1; j<m_instance.getNbCities(); j++) {
+					int ville_suiv=j+1;
 					if(j!=ville) {
-						long minimum=m_instance.getDistances(1,2);
-						int ville_suiv = 2;
-						if(visite[j]==false && m_instance.getDistances(ville,j)<minimum) {
+						long minimum=m_instance.getDistances(ville,j);
+						if(visite[j-1]==false && m_instance.getDistances(ville,j)<minimum) {
 							minimum=m_instance.getDistances(ville, j);
 							ville_suiv = j;
 						}
-						visite[ville_suiv]=true;
-						m_solution.setCityPosition(ville_suiv, compteur+1);
+						visite[ville_suiv-1]=true;
+						m_solution.setCityPosition(ville_suiv, compteur);
 					}
 				}
 				compteur++;
