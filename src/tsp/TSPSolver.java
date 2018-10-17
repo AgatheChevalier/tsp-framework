@@ -65,7 +65,7 @@ public class TSPSolver {
 	public void solve() throws Exception
 	{
 		localSearchPPV();
-		System.out.println("Avec notre méthode le coût du tour est: "+calculCout());
+		System.out.println(calculCout());
 	}
 		
 	/** Première méthode que nous avons développée: un Local Search qui cherche de ville en ville la plus proche voisine.
@@ -77,7 +77,6 @@ public class TSPSolver {
 		m_solution.print(System.err);
 		long t = System.currentTimeMillis();
 		long tempspasse = 0;		
-		/* Tant que l'on a pas dépassé la limite de temps, on déroule l'algorithme */
 		boolean[] villes = new boolean[m_instance.getNbCities()];
 		int ville_courante = 0;	
 		villes[ville_courante]=true;
@@ -94,14 +93,6 @@ public class TSPSolver {
 		/* On relie la première ville avec dernière */
 		m_solution.setCityPosition(0,m_instance.getNbCities());
 		/* On teste le temps depuis lequel le programme tourne */
-		tempspasse=System.currentTimeMillis()-t;
-	}
-	
-	public void departRandomLocalSearchPPV() throws Exception {
-		m_solution.print(System.err);
-		long t = System.currentTimeMillis();
-		long tempspasse = 0;
-		
 		tempspasse=System.currentTimeMillis()-t;
 	}
 	
