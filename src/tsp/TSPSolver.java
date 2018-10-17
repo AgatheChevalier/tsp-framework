@@ -65,11 +65,9 @@ public class TSPSolver {
 	public void solve() throws Exception
 	{
 		localSearchPPV();
+		System.out.println("Avec notre méthode le coût du tour est: "+calculCout());
 	}
 		
-	
-	
-	
 	/** Première méthode que nous avons développée: un Local Search qui cherche de ville en ville la plus proche voisine.
 	 * Appelle la méthode plusProcheVoisin(int ville_courante, boolean[] villes).
 	 * @throws Exception
@@ -100,7 +98,20 @@ public class TSPSolver {
 			/* On teste le temps depuis lequel le programme tourne */
 			tempspasse=System.currentTimeMillis()-t;
 		}
-
+	}
+	
+	/** Cette méthode calcule le coût d'un trajet en appelant la méthode getTour() de la classe Solution. 
+	 * @throws Exception
+	 * @version 1 (16/10/2018)
+	 * */
+	public int calculCout() throws Exception {
+		m_solution.print(System.err);
+		int res = 0;
+		for(int i=0; i<m_solution.getTour().length-1; i++) {
+			res = res + (int)(m_instance.getDistances(m_solution.getTour()[i], m_solution.getTour()[i+1]));
+		}
+		res = res+(int)(m_instance.getDistances(m_solution.getTour()[m_solution.getTour().length-1], m_solution.getTour()[0]));
+		return res;
 	}
 
 	/** Cette méthode cherche le Plus Proche Voisin non visité de ville_courante contenu dans tableau_villes.

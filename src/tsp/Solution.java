@@ -275,4 +275,11 @@ public class Solution{
 	public String getError() {
 		return m_error;
 	}
+	
+	/** Retourne le tableau d'ordre des villes du tour
+	 * @return Un tableau d'entiers correspondant à l'ordre des villes du tour
+	 */
+	public int[] getTour() {
+		return m_cities;
+	}
 }
