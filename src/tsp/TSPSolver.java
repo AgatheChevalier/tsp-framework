@@ -76,28 +76,33 @@ public class TSPSolver {
 	public void localSearchPPV() throws Exception {
 		m_solution.print(System.err);
 		long t = System.currentTimeMillis();
+		long tempspasse = 0;		
+		/* Tant que l'on a pas dépassé la limite de temps, on déroule l'algorithme */
+		boolean[] villes = new boolean[m_instance.getNbCities()];
+		int ville_courante = 0;	
+		villes[ville_courante]=true;
+		m_solution.setCityPosition(ville_courante, 0);
+		int compteur=1;
+		/* Tant que l'on a pas traité le cas de chaque ville on continue à chercher les plus proches voisins */
+		while(compteur<m_instance.getNbCities()) {
+			int ville_proche = plusProcheVoisin(ville_courante,villes);
+			villes[ville_proche]=true;
+			m_solution.setCityPosition(ville_proche, compteur);
+			ville_courante=ville_proche;
+			compteur++;
+		}
+		/* On relie la première ville avec dernière */
+		m_solution.setCityPosition(0,m_instance.getNbCities());
+		/* On teste le temps depuis lequel le programme tourne */
+		tempspasse=System.currentTimeMillis()-t;
+	}
+	
+	public void departRandomLocalSearchPPV() throws Exception {
+		m_solution.print(System.err);
+		long t = System.currentTimeMillis();
 		long tempspasse = 0;
 		
-		/* Tant que l'on a pas dépassé la limite de temps, on déroule l'algorithme */
-		while(tempspasse<m_timeLimit) {
-			boolean[] villes = new boolean[m_instance.getNbCities()];
-			int ville_courante = 0;	
-			villes[ville_courante]=true;
-			m_solution.setCityPosition(ville_courante, 0);
-			int compteur=1;
-			/* Tant que l'on a pas traité le cas de chaque ville on continue à chercher les plus proches voisins */
-			while(compteur<m_instance.getNbCities()) {
-				int ville_proche = plusProcheVoisin(ville_courante,villes);
-				villes[ville_proche]=true;
-				m_solution.setCityPosition(ville_proche, compteur);
-				ville_courante=ville_proche;
-				compteur++;
-			}
-			/* On relie la première ville avec dernière */
-			m_solution.setCityPosition(0,m_instance.getNbCities());
-			/* On teste le temps depuis lequel le programme tourne */
-			tempspasse=System.currentTimeMillis()-t;
-		}
+		tempspasse=System.currentTimeMillis()-t;
 	}
 	
 	/** Cette méthode calcule le coût d'un trajet en appelant la méthode getTour() de la classe Solution. 
