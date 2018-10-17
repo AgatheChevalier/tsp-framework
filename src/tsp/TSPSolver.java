@@ -1,21 +1,16 @@
 package tsp;
-
 import java.util.ArrayList;
-
 import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 /**
  * 
  * This class is the place where you should enter your code and from which you can create your own objects.
- * 
  * The method you must implement is solve(). This method is called by the programmer after loading the data.
- * 
  * The TSPSolver object is created by the Main class.
  * The other objects that are created in Main can be accessed through the following TSPSolver attributes: 
  * 	- #m_instance :  the Instance object which contains the problem data
  * 	- #m_solution : the Solution object to modify. This object will store the result of the program.
  * 	- #m_timeLimit : the maximum time limit (in seconds) given to the program.
- *  
  * @author Damien Prot, Fabien Lehuede, Axel Grimault
  * @version 2017
  * 
@@ -78,6 +73,7 @@ public class TSPSolver {
 	/** Première méthode que nous avons développée: un Local Search qui cherche de ville en ville la plus proche voisine.
 	 * Appelle la méthode plusProcheVoisin(int ville_courante, boolean[] villes).
 	 * @throws Exception
+	 * @version 1 (15/10/2018)
 	 */
 	public void localSearchPPV() throws Exception {
 		m_solution.print(System.err);
@@ -113,6 +109,7 @@ public class TSPSolver {
 	 * Si la ville i a déjà été visitée, ville[i]=true. Sinon, ville[i]=false.
 	 * @return Un entier correspondant à l'indice de la ville la plus proche de ville_courante non visitée.
 	 * @throws Exception
+	 * @version 1 (15/10/2018)
 	 */
 	public int plusProcheVoisin(int ville_courante, boolean[] tableau_villes) throws Exception {
 		int index = ville_courante;
