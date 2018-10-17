@@ -96,18 +96,30 @@ public class TSPSolver {
 		tempspasse=System.currentTimeMillis()-t;
 	}
 	
-	/** Cette méthode calcule le coût d'un trajet en appelant la méthode getTour() de la classe Solution. 
+	/** Un Local Search qui cherche de ville en ville la plus proche voisine, en partant de ville_depart.
+	 * Appelle la méthode plusProcheVoisin(int ville_courante, boolean[] villes).
+	 * @param ville_depart Entier correspondant à l'indice de la ville de départ
 	 * @throws Exception
 	 * @version 1 (16/10/2018)
 	 * */
-	public int calculCout() throws Exception {
+	public void localSearchPPV(int ville_depart) throws Exception {
 		m_solution.print(System.err);
-		int res = 0;
-		for(int i=0; i<m_solution.getTour().length-1; i++) {
-			res = res + (int)(m_instance.getDistances(m_solution.getTour()[i], m_solution.getTour()[i+1]));
+		long t = System.currentTimeMillis();
+		long tempspasse = 0;	
+		boolean[] villes = new boolean[m_instance.getNbCities()];
+		int ville_courante = ville_depart;
+		villes[ville_courante]=true;
+		m_solution.setCityPosition(ville_courante, 0);
+		int compteur=1;
+		while(compteur<m_instance.getNbCities()) {
+			int ville_proche = plusProcheVoisin(ville_courante,villes);
+			villes[ville_proche]=true;
+			m_solution.setCityPosition(ville_proche, compteur);
+			ville_courante=ville_proche;
+			compteur++;
 		}
-		res = res+(int)(m_instance.getDistances(m_solution.getTour()[m_solution.getTour().length-1], m_solution.getTour()[0]));
-		return res;
+		m_solution.setCityPosition(ville_depart, m_instance.getNbCities());
+		tempspasse=System.currentTimeMillis()-t;
 	}
 
 	/** Cette méthode cherche le Plus Proche Voisin non visité de ville_courante contenu dans tableau_villes.
@@ -140,8 +152,20 @@ public class TSPSolver {
 		 * On renvoie son indice */
 		return ville_proche;
 	}
-
 	
+	/** Cette méthode calcule le coût d'un trajet en appelant la méthode getTour() de la classe Solution. 
+	 * @throws Exception
+	 * @version 1 (16/10/2018)
+	 * */
+	public int calculCout() throws Exception {
+		m_solution.print(System.err);
+		int res = 0;
+		for(int i=0; i<m_solution.getTour().length-1; i++) {
+			res = res + (int)(m_instance.getDistances(m_solution.getTour()[i], m_solution.getTour()[i+1]));
+		}
+		res = res+(int)(m_instance.getDistances(m_solution.getTour()[m_solution.getTour().length-1], m_solution.getTour()[0]));
+		return res;
+	}	
 	
 
 	// -----------------------------
@@ -184,9 +208,7 @@ public class TSPSolver {
 	 * @param time time given to solve the problem
 	 */
 	public void setTimeLimit(long time) {
-		
 		this.m_timeLimit = time;
-		
 	}
 
 }
