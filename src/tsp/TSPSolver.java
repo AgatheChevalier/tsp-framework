@@ -59,108 +59,84 @@ public class TSPSolver {
 
 	/**
 	 * **TODO** Modify this method to solve the problem.
-	 * 
 	 * Do not print text on the standard output (eg. using `System.out.print()` or `System.out.println()`).
 	 * This output is dedicated to the result analyzer that will be used to evaluate your code on multiple instances.
-	 * 
 	 * You can print using the error output (`System.err.print()` or `System.err.println()`).
-	 * 
 	 * When your algorithm terminates, make sure the attribute #m_solution in this class points to the solution you want to return.
-	 * 
 	 * You have to make sure that your algorithm does not take more time than the time limit #m_timeLimit.
-	 * 
 	 * @throws Exception may return some error, in particular if some vertices index are wrong.
 	 */
 
 	public void solve() throws Exception
 	{
-		plusProcheVoisin();    // choisir méthode qu'on teste ici
-		
-		
-	
-		
-		// Example of a time loop
-		long t = System.currentTimeMillis();
-		long tempspasse = 0;}
-/*		boolean[] visite = new boolean[m_instance.getNbCities()];
-		visite[0] = true; 
-		
-		while(tempspasse < m_timeLimit*100) {
-			m_solution.setCityPosition(1, 0);
-			int compteur=0;
-			int ville = 1;
-			while(compteur<m_instance.getNbCities()) {
-				int ville_suiv=plusProcheVoisin(ville,visite);
-				visite[ville_suiv]=true;
-				m_solution.setCityPosition(ville_suiv, compteur);
-				compteur++;
-				ville=ville_suiv;
-				tempspasse = System.currentTimeMillis()-t;
-				if (compteur==m_instance.getNbCities()) { // si toutes les villes ont ete parcourues, retour a la ville 0
-					ville_suiv=0;
-				}
-			}
-		} */
+		localSearchPPV();
+	}
 		
 	
 	
 	
-	/** Méthode du plus proche voisin
-	 * Pour la tester, mettre le nom de la méthode dans solve ci dessus
-	 * 
+	/** Première méthode que nous avons développée: un Local Search qui cherche de ville en ville la plus proche voisine.
+	 * Appelle la méthode plusProcheVoisin(int ville_courante, boolean[] villes).
 	 * @throws Exception
 	 */
-	
-		
-	public void plusProcheVoisin() throws Exception {
+	public void localSearchPPV() throws Exception {
 		m_solution.print(System.err);
+		long t = System.currentTimeMillis();
+		long tempspasse = 0;
 		
-		boolean[] villes = new boolean[m_instance.getNbCities()];
-		int ville_courante = 0;							//première ville indice 0
-		villes[ville_courante]=true; 					// ville 0 visitée
-		m_solution.setCityPosition(ville_courante, 0); 	//on part de ville 0
-		int compteur=1; 									//doit arriver au nb de villes
-		while(compteur<m_instance.getNbCities()) {
-			int index = ville_courante; 		//on va faire un minimum: il nous faut une distance "random" pour initialiser
-											// attention : on ne doit pas prendre une ville déjà visitée
-			while(villes[index]==true) {
-				index = (index+1)%villes.length; 		//permet de parcourir tout si besoin, sans sortie d'index
-			}
-			long minimum = m_instance.getDistances(ville_courante, index);
-				int ville_proche = index;
-				for(int i=0; i<villes.length; i++) {
-					if(villes[i]==false && m_instance.getDistances(ville_courante,i)<minimum) { //tout ça peut être remplacé par méthode plusProcheVoisin
-						minimum=m_instance.getDistances(ville_courante,i);
-						ville_proche=i;
-					}
-				}
-				villes[ville_proche]=true;							// on visite la plus proche
-				m_solution.setCityPosition(ville_proche, compteur);  //on la place
+		/* Tant que l'on a pas dépassé la limite de temps, on déroule l'algorithme */
+		while(tempspasse<m_timeLimit) {
+			boolean[] villes = new boolean[m_instance.getNbCities()];
+			int ville_courante = 0;	
+			villes[ville_courante]=true;
+			m_solution.setCityPosition(ville_courante, 0);
+			int compteur=1;
+			/* Tant que l'on a pas traité le cas de chaque ville on continue à chercher les plus proches voisins */
+			while(compteur<m_instance.getNbCities()) {
+				int ville_proche = plusProcheVoisin(ville_courante,villes);
+				villes[ville_proche]=true;
+				m_solution.setCityPosition(ville_proche, compteur);
 				ville_courante=ville_proche;
 				compteur++;
+			}
+			/* On relie la première ville avec dernière */
+			m_solution.setCityPosition(0,m_instance.getNbCities());
+			/* On teste le temps depuis lequel le programme tourne */
+			tempspasse=System.currentTimeMillis()-t;
 		}
-		m_solution.setCityPosition(0,m_instance.getNbCities());
-		//il faut calculer la distance totale aussi
 
 	}
 
-	/** Algorithme qui trouve le plus proche voisin d'une seule ville
-	 * @param ville
-	 * @param lesVilles : tableau boolean pour savoir si déjà visitée ou non
-	 * @return
+	/** Cette méthode cherche le Plus Proche Voisin non visité de ville_courante contenu dans tableau_villes.
+	 * @param ville_courante Un entier correspondant à l'indice de la ville dont on cherche le PPV.
+	 * @param tableau_villes Un tableau de booléens de longueur m_instance.getNbCities(). 
+	 * Si la ville i a déjà été visitée, ville[i]=true. Sinon, ville[i]=false.
+	 * @return Un entier correspondant à l'indice de la ville la plus proche de ville_courante non visitée.
 	 * @throws Exception
 	 */
-	public int plusProcheVoisin(int ville,boolean[] lesVilles) throws Exception {
-		int villePlusProche=ville+1;
-		long minimum= m_instance.getDistances(ville, villePlusProche);
-		for (int i=0; i<m_instance.getNbCities(); i++) {
-			if (m_instance.getDistances(ville, i)<minimum && lesVilles[i]==false) {
-				minimum=m_instance.getDistances(ville-1,i);
-				villePlusProche=i;
+	public int plusProcheVoisin(int ville_courante, boolean[] tableau_villes) throws Exception {
+		int index = ville_courante;
+		/* Cette boucle cherche la ville la proche de ville_courante EN INDICE qui n'a pas été visitée
+		 * Le but est de trouver une référence pour le minimum de distance entre ville_courante et une autre ville
+		 * On stocke cees références de distance et d'indice dans minimum et ville_proche */
+		while(tableau_villes[index] == true) {
+			index = (index+1)%tableau_villes.length;
+		}
+		long minimum = m_instance.getDistances(ville_courante, index);
+		int ville_proche = index;
+		/* Cette boucle va tester si dans le reste des villes non visitées, on va trouver une ville plus proche que la référence
+		 * Si c'est le cas, on remplace minimum et ville_proche par la distance et l'indice de la ville concernée */
+		for(int i=0; i<tableau_villes.length; i++) {
+			if(tableau_villes[i]==false && m_instance.getDistances(ville_courante, i)<minimum) {
+				minimum = m_instance.getDistances(ville_courante, i);
+				ville_proche = i;
 			}
 		}
-		return villePlusProche;
+		/* On a trouvé la ville plus proche voisine non visitée de ville_courante 
+		 * On renvoie son indice */
+		return ville_proche;
 	}
+
 	
 	
 
