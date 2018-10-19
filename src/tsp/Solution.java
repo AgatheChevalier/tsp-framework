@@ -1,6 +1,7 @@
 package tsp;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -298,5 +299,13 @@ public class Solution {
 	
 	public double getFitness() throws Exception {
 		return( 1/this.getCout() );
+	}
+	
+	public Solution genererSolution() {
+		Solution s = new Solution(m_instance);
+		ArrayList<Integer> villes_liste = new ArrayList<Integer>();
+		for(int i=0; i<m_instance.getNbCities(); i++) {
+			villes_liste.add(s.getTour()[i]);			
+		}
 	}
 }
