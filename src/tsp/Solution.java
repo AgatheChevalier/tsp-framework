@@ -1,7 +1,12 @@
 package tsp;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 /**
  * 
@@ -298,5 +303,10 @@ public class Solution {
 	
 	public double getFitness() throws Exception {
 		return( 1/this.getCout() );
+	}
+	
+	public Solution genererSolution() {
+		Solution s = new Solution(m_instance);
+		return s;
 	}
 }
