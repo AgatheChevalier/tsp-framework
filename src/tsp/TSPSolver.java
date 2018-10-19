@@ -1,5 +1,7 @@
 package tsp;
 import java.util.ArrayList;
+import java.util.Collections;
+
 import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 /**
@@ -64,8 +66,11 @@ public class TSPSolver {
 
 	public void solve() throws Exception
 	{
-		localSearchPPV();
+		//localSearchPPV();
+		generateSolution2();
+		
 		System.out.println(m_solution.getCout());
+
 	}
 		
 	/** Première méthode que nous avons développée: un Local Search qui cherche de ville en ville la plus proche voisine.
@@ -168,6 +173,43 @@ public class TSPSolver {
 	}	
 	
 
+
+	public Solution generateSolution() throws Exception { // fonctionne pas
+		m_solution.print(System.err);
+		boolean[] prise = new boolean[m_instance.getNbCities()]; //true si déjà prise
+		int position=(int)(Math.random()*(m_instance.getNbCities()));
+		int compt=0;
+		for (int i=0; i<m_instance.getNbCities(); i++) {
+			while (prise[position] && compt<m_instance.getNbCities()) {
+				position=(int)(Math.random()*(m_instance.getNbCities()));
+				compt++;
+			}
+			m_solution.setCityPosition(i, position);
+			prise[position]=true;
+		}
+		return m_solution;
+		
+	}
+	
+	public Solution generateSolution2() throws Exception {
+		m_solution.print(System.err);
+		ArrayList<Integer> position = new ArrayList<Integer>();
+		for (int i=0; i<m_instance.getNbCities(); i++) {
+			position.add(i);
+		}
+		Collections.shuffle(position);
+		int compt=0;
+		while (compt<m_instance.getNbCities()) {
+			m_solution.setCityPosition(position.get(compt), compt);
+			compt++;
+		}
+		m_solution.setCityPosition(position.get(0), m_instance.getNbCities());
+		return m_solution;
+		
+	}
+	
+	
+	
 	
 
 	// -----------------------------
