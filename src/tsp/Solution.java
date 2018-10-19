@@ -3,6 +3,10 @@ package tsp;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 /**
  * 
@@ -303,9 +307,6 @@ public class Solution {
 	
 	public Solution genererSolution() {
 		Solution s = new Solution(m_instance);
-		ArrayList<Integer> villes_liste = new ArrayList<Integer>();
-		for(int i=0; i<m_instance.getNbCities(); i++) {
-			villes_liste.add(s.getTour()[i]);			
-		}
+		return s;
 	}
 }
