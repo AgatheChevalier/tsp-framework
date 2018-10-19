@@ -67,7 +67,8 @@ public class TSPSolver {
 	public void solve() throws Exception
 	{
 		localSearchPPV();
-		
+		generateSolutionRandom();
+		System.out.println(m_solution.getCout());
 	}
 		
 	/** Première méthode que nous avons développée: un Local Search qui cherche de ville en ville la plus proche voisine.
@@ -187,9 +188,14 @@ public class TSPSolver {
 		
 	}
 	
-	
-	
-	
+	public Solution[] generatePopulation(int taille_pop) throws Exception{
+		m_solution.print(System.err);
+		Solution[] s = new Solution[taille_pop];
+		for(int i=0; i<s.length; i++) {
+			s[i]=generateSolutionRandom();
+		}
+		return s;
+	}
 	
 	
 
