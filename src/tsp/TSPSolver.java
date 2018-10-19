@@ -170,7 +170,7 @@ public class TSPSolver {
 	}	
 
 	
-	public Solution generateSolution2() throws Exception {
+	public Solution generateSolution() throws Exception {
 		m_solution.print(System.err);
 		ArrayList<Integer> position = new ArrayList<Integer>();
 		for (int i=0; i<m_instance.getNbCities(); i++) {
