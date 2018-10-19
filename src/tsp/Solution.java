@@ -64,7 +64,7 @@ import java.util.Arrays;
  * @version 2017
  * 
  */
-public class Solution{
+public class Solution {
 
 	// -----------------------------
 	// ----- ATTRIBUTS -------------
@@ -281,5 +281,22 @@ public class Solution{
 	 */
 	public int[] getTour() {
 		return m_cities;
+	}
+	
+	/** Cette méthode calcule le coût d'un trajet en appelant la méthode getTour() de la classe Solution. 
+	 * @throws Exception
+	 * @version 2 (19/10/2018)
+	 * */
+	public int getCout() throws Exception {
+		int res = 0;
+		for(int i=0; i<getTour().length-1; i++) {
+			res = res + (int)(m_instance.getDistances(getTour()[i], getTour()[i+1]));
+		}
+		res = res+(int)(m_instance.getDistances(getTour()[getTour().length-1], getTour()[0]));
+		return res;
+	}	
+	
+	public double getFitness() throws Exception {
+		return( 1/this.getCout() );
 	}
 }

@@ -65,7 +65,7 @@ public class TSPSolver {
 	public void solve() throws Exception
 	{
 		localSearchPPV();
-		System.out.println(calculCout());
+		System.out.println(m_solution.getCout());
 	}
 		
 	/** Première méthode que nous avons développée: un Local Search qui cherche de ville en ville la plus proche voisine.
@@ -157,7 +157,7 @@ public class TSPSolver {
 	 * @throws Exception
 	 * @version 1 (16/10/2018)
 	 * */
-	public int calculCout() throws Exception {
+	public int getCout() throws Exception {
 		m_solution.print(System.err);
 		int res = 0;
 		for(int i=0; i<m_solution.getTour().length-1; i++) {
