@@ -66,11 +66,8 @@ public class TSPSolver {
 
 	public void solve() throws Exception
 	{
-		//localSearchPPV();
-		generateSolution2();
+		localSearchPPV();
 		
-		System.out.println(m_solution.getCout());
-
 	}
 		
 	/** Première méthode que nous avons développée: un Local Search qui cherche de ville en ville la plus proche voisine.
@@ -171,25 +168,7 @@ public class TSPSolver {
 		res = res+(int)(m_instance.getDistances(m_solution.getTour()[m_solution.getTour().length-1], m_solution.getTour()[0]));
 		return res;
 	}	
-	
 
-
-	public Solution generateSolution() throws Exception { // fonctionne pas
-		m_solution.print(System.err);
-		boolean[] prise = new boolean[m_instance.getNbCities()]; //true si déjà prise
-		int position=(int)(Math.random()*(m_instance.getNbCities()));
-		int compt=0;
-		for (int i=0; i<m_instance.getNbCities(); i++) {
-			while (prise[position] && compt<m_instance.getNbCities()) {
-				position=(int)(Math.random()*(m_instance.getNbCities()));
-				compt++;
-			}
-			m_solution.setCityPosition(i, position);
-			prise[position]=true;
-		}
-		return m_solution;
-		
-	}
 	
 	public Solution generateSolution2() throws Exception {
 		m_solution.print(System.err);
@@ -207,6 +186,8 @@ public class TSPSolver {
 		return m_solution;
 		
 	}
+	
+	
 	
 	
 	
