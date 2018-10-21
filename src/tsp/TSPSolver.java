@@ -68,8 +68,11 @@ public class TSPSolver {
 	{
 		localSearchPPV();
 		generateSolutionRandom();
-		System.out.println(m_solution.getCout());
 	}
+	
+	// -----------------------------------
+	// -- ALGORITHME PLUS PROCHE VOISIN --
+	// -----------------------------------	
 		
 	/** Première méthode que nous avons développée: un Local Search qui cherche de ville en ville la plus proche voisine.
 	 * Appelle la méthode plusProcheVoisin(int ville_courante, boolean[] villes).
@@ -92,7 +95,7 @@ public class TSPSolver {
 			m_solution.setCityPosition(ville_proche, compteur);
 			ville_courante=ville_proche;
 			compteur++;
-		}
+		} 
 		/* On relie la première ville avec dernière */
 		m_solution.setCityPosition(0,m_instance.getNbCities());
 		/* On teste le temps depuis lequel le programme tourne */
@@ -170,7 +173,14 @@ public class TSPSolver {
 		return res;
 	}	
 
+	// -----------------------------
+	// --- ALGORITHME GENETIQUE ----
+	// -----------------------------	
 	
+/** Cette méthode génère un chemin au hasard sur l'instance choisie.
+ * @return Une solution au problème sur l'instance choisie
+ * @version 1 (19/10/2018)
+ * */
 	public Solution generateSolutionRandom() throws Exception {
 		m_solution.print(System.err);
 		ArrayList<Integer> position = new ArrayList<Integer>();
@@ -188,6 +198,11 @@ public class TSPSolver {
 		
 	}
 	
+/** Cette méthode génère une population de chemins sur l'instance choisie
+ * @param taille_pop  La taille de population que l'on choisie
+ * @return Un tableau de solutions random de taille que l'on a choisie
+ * @version 1 (19/10/18)
+ * */
 	public Solution[] generatePopulation(int taille_pop) throws Exception{
 		m_solution.print(System.err);
 		Solution[] s = new Solution[taille_pop];
@@ -197,7 +212,109 @@ public class TSPSolver {
 		return s;
 	}
 	
+/** Cette méthode permet de trouver le chemin avec le coût minimum dans une population 
+ * @param population Un tableau de solutions au problème 
+ * @return L'indice dans le tableau entré en paramètre de la ville ayant le coût minimum
+ * @version 1 (21/10/2018) 
+ * */
+	public Object[] getBestFitness(Solution[] population) throws Exception {
+		m_solution.print(System.err);
+		long minimum = population[0].getCout();
+		int indice = 0;
+		for(int i=0; i<population.length; i++) {
+			if(population[i].getCout()<minimum) {
+				minimum = population[i].getCout();
+				indice = i;
+			}
+		}
+		Object[] resultat = new Object[2];
+		resultat[0] = population[indice];
+		resultat[1] = indice;
+		return resultat;
+	}
 	
+	public Solution[] evolution(Solution[] population, int taillepop, int tailleTournoi, double tauxMutation) throws Exception {
+		m_solution.print(System.err);
+		Solution[] nouvelle_pop = generatePopulation(taillepop);
+		nouvelle_pop[(int)getBestFitness(population)[1]] = (Solution)getBestFitness(population)[0]; // On enregistre le meilleur circuit de notre ancienne population
+		for(int i=0; i<nouvelle_pop.length; i++) {
+			Solution parent1 = tournoi(population,tailleTournoi);
+			Solution parent2 = tournoi(population,tailleTournoi);
+			Solution enfant = crossover(parent1,parent2);
+			nouvelle_pop[i] = enfant;
+		}
+		for(int i=0; i<nouvelle_pop.length; i++) {
+			muter(nouvelle_pop[i], tauxMutation);
+		}
+		return nouvelle_pop;
+	}
+	
+/** Etape 2: 
+ * Cette méthode retourne l'enfant de deux individus que l'on a choisi de reproduire 
+ * @param individu_1
+ * @param individu_2
+ * @version 1 (21/10/2018) 
+ * */	
+	public Solution crossover(Solution individu_1, Solution individu_2) {
+		int indiceCrossover_1 = (int)((individu_1.getTour().length-1)*0.33);
+		int indiceCrossover_2 = (int)((individu_1.getTour().length-1)*0.33);
+		Solution enfant = new Solution(m_instance);
+		int[] villes_enfant = enfant.getTour();
+		for(int i=0; i<indiceCrossover_1; i++) {
+			villes_enfant[i] = individu_1.getTour()[i];
+		}
+		for(int i=indiceCrossover_1; i<indiceCrossover_2; i++) {
+			villes_enfant[i] = individu_2.getTour()[i];
+		}
+		for(int i=indiceCrossover_2; i<villes_enfant.length; i++) {
+			villes_enfant[i] = individu_1.getTour()[i];
+		}		
+		return enfant;
+	}
+	
+	public void muter(Solution circuit, double tauxMutation) throws Exception {
+		m_solution.print(System.err);
+		for(int circuitPos1=0; circuitPos1<circuit.getTour().length; circuitPos1++) {
+			double random = Math.random();
+			if(random<tauxMutation) {
+				int circuitPos2 = (int)(circuit.getTour().length*random);
+				int ville_1 = circuit.getTour()[circuitPos1];
+				int ville_2 = circuit.getTour()[circuitPos2];
+				circuit.setCityPosition(ville_1, circuitPos2);
+				circuit.setCityPosition(ville_2, circuitPos1);
+			}
+		}
+	}
+	
+/** Etape 3:
+ * Cette méthode retourne le meilleur circuit du tournoi
+ * @param population Notre population où effectuer le tournoi
+ * @param tailleTournoi Le nombre de participants au tournoi
+ * @return fittest Le meilleur circuit du tournoi
+ * @version 1 (21/10/2018)
+ * */ 
+	public Solution tournoi(Solution[] population, int tailleTournoi) throws Exception {
+		m_solution.print(System.err);
+		Solution[] tournoi = new Solution[tailleTournoi];
+		for(int i=0; i<= tailleTournoi; i++) {
+			int random = (int)(Math.random()*population.length);
+			tournoi[i] = population[random];
+		}
+		Solution fittest = (Solution)getBestFitness(tournoi)[0];
+		return fittest;
+	}
+	
+	public void GeneticAlgorithm() throws Exception {
+		m_solution.print(System.err);
+/* Probabilité qu'une ville d'un circuit subisse une mutation. 
+ * Cela correspond à l'inversion de la position de deux villes dans le circuit. 
+ * Le taux est assez faible car la probabilité d'obtenir une distance plus faible en inversant deux ville est peu élevée */		
+		double tauxMutation = 0.015;
+/* Taille des poules de notre tournoi (l'une des méthodes possibles pour sélectionner les individus que nous souhaitons faire se reproduire).
+La sélection par tournoi fait affronter plusieurs individus sélectionnés au hasard. Ici ce sont donc des tournois de 5 circuits et on garde le circuit avec la distance la plus faible. */
+		int tailleTournoi = 5;
+		
+	}
 
 	// -----------------------------
 	// ----- GETTERS / SETTERS -----
