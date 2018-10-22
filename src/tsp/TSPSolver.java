@@ -70,6 +70,10 @@ public class TSPSolver {
 	{
 		//System.out.println(generateSolutionRandom().isFeasible());
 		GeneticAlgorithm();
+		//Solution sol = generateSolutionRandom();
+		//for (int i=0; i<m_instance.getNbCities(); i++) {
+		//	System.out.println(sol.contains(i));
+		//}
 	}
 	
 	// -----------------------------------
@@ -328,12 +332,11 @@ public class TSPSolver {
  */	
 	public Solution crossover(Solution individu_1, Solution individu_2) throws Exception {
 		int nbVilles = m_instance.getNbCities();
-		int start = (int)(Math.random()*nbVilles);
-		int end = (int)(Math.random()*nbVilles);
+		int start = (int)(Math.random()*nbVilles-1)+1;
+		int end = (int)(Math.random()*nbVilles-1)+1;
 		Solution enfant = new Solution(m_instance);
-		//for(int i=0; i<nbVilles; i++) {
-			//enfant.setCityPosition(i,m_instance.getNbCities()+1);
-		//}
+		enfant.setCityPosition(0,0);
+		enfant.setCityPosition(0, nbVilles);
 		for(int i=0; i<nbVilles; i++) {
 			if(start<end && i>start && i<end) {
 				enfant.setCityPosition(i, individu_1.getCity(i));
@@ -343,13 +346,10 @@ public class TSPSolver {
 				}
 			}
 		}
-		
 		for(int i=0; i<nbVilles; i++) {
 			if(enfant.contains(individu_2.getCity(i))!=true) {
 				for(int j=0; j<nbVilles; j++) {
-					//if(enfant.getCity(j)==m_instance.getNbCities()+1) {
-						enfant.setCityPosition(j, individu_2.getCity(i));
-					//}
+					enfant.setCityPosition(j, individu_2.getCity(i));
 				}
 			}
 		}
@@ -367,10 +367,10 @@ public class TSPSolver {
 	public void muter(Solution circuit, double tauxMutation) throws Exception {
 		m_solution.print(System.err);
 		int nbVilles = m_instance.getNbCities();
-		for(int circuitPos1=0; circuitPos1<nbVilles; circuitPos1++) {
+		for(int circuitPos1=1; circuitPos1<nbVilles; circuitPos1++) {
 			double random = Math.random();
 			if(random<tauxMutation) {
-				int circuitPos2 = (int)(nbVilles*random);
+				int circuitPos2 = (int)(nbVilles*random-1)+1;
 				int ville_1 = circuit.getTour()[circuitPos1];
 				int ville_2 = circuit.getTour()[circuitPos2];
 				circuit.setCityPosition(ville_1, circuitPos2);
@@ -422,7 +422,9 @@ La sélection par tournoi fait affronter plusieurs individus sélectionnés au h
 		}
 		System.out.println("Distance finale: "+((Solution)getBestFitness(populationMere)[0]).getCout());
 		Solution meilleureSolution = (Solution)getBestFitness(populationMere)[0];
-		m_solution = meilleureSolution; 
+		for (int i=0; i<m_instance.getNbCities(); i++) {
+			m_solution.setCityPosition(i, meilleureSolution.getCity(i));
+		}
 	}
 
 	// -----------------------------
