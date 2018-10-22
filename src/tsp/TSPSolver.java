@@ -68,8 +68,7 @@ public class TSPSolver {
 
 	public void solve() throws Exception
 	{
-		localSearchPPV();
-		generateSolutionRandom();
+		GeneticAlgorithm();
 	}
 	
 	// -----------------------------------
@@ -316,6 +315,7 @@ public class TSPSolver {
 				}
 			}
 		}
+		enfant.setCityPosition(enfant.getTour()[0], enfant.getTour().length);
 		return enfant;
 	}
 	
@@ -376,6 +376,14 @@ public class TSPSolver {
 La sélection par tournoi fait affronter plusieurs individus sélectionnés au hasard. Ici ce sont donc des tournois de 5 circuits et on garde le circuit avec la distance la plus faible. */
 		int tailleTournoi = 5;
 		
+		Solution[] populationMere = generatePopulation(50);
+		System.out.println("Distance initale: "+((Solution)getBestFitness(populationMere)[0]).getCout());
+		for(int i=0; i<100; i++) {
+			populationMere = evolution(populationMere, tailleTournoi, tauxMutation);
+		}
+		System.out.println("Distance finale: "+((Solution)getBestFitness(populationMere)[0]).getCout());
+		Solution meilleureSolution = (Solution)getBestFitness(populationMere)[0];
+		m_solution = meilleureSolution;
 	}
 
 	// -----------------------------
