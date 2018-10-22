@@ -305,6 +305,20 @@ public class Solution {
 		return( 1/this.getCout() );
 	}
 	
+	
+	public boolean contains(int Ville) {
+		boolean trouve = false;
+		int compt=0;
+		while (!trouve && compt<this.getTour().length) {
+			if (this.getTour()[compt]==Ville) {
+				trouve=true;
+			} else {
+				compt++;
+			}
+		}
+		return trouve;
+	}
+	
 	public Solution genererSolution() {
 		Solution s = new Solution(m_instance);
 		return s;
