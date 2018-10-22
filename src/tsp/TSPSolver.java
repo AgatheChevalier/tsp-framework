@@ -105,33 +105,6 @@ public class TSPSolver {
 		tempspasse=System.currentTimeMillis()-t;
 	}
 	
-	/**
-	 *  Un Local Search qui cherche de ville en ville la plus proche voisine, en partant de ville_depart.
-	 * Appelle la méthode plusProcheVoisin(int ville_courante, boolean[] villes).
-	 *
-	 * @version 1 (16/10/2018)
-	 * @param ville_depart Entier correspondant à l'indice de la ville de départ
-	 * @throws Exception the exception
-	 */
-	public void localSearchPPV(int ville_depart) throws Exception {
-		m_solution.print(System.err);
-		long t = System.currentTimeMillis();
-		long tempspasse = 0;	
-		boolean[] villes = new boolean[m_instance.getNbCities()];
-		int ville_courante = ville_depart;
-		villes[ville_courante]=true;
-		m_solution.setCityPosition(ville_courante, 0);
-		int compteur=1;
-		while(compteur<m_instance.getNbCities()) {
-			int ville_proche = plusProcheVoisin(ville_courante,villes);
-			villes[ville_proche]=true;
-			m_solution.setCityPosition(ville_proche, compteur);
-			ville_courante=ville_proche;
-			compteur++;
-		}
-		m_solution.setCityPosition(ville_depart, m_instance.getNbCities());
-		tempspasse=System.currentTimeMillis()-t;
-	}
 
 	/**
 	 *  Cette méthode cherche le Plus Proche Voisin non visité de ville_courante contenu dans tableau_villes.
@@ -184,58 +157,54 @@ public class TSPSolver {
 		return res;
 	}	
 	
+	// -----------------------------
+	// ----- ALGORITHME 2-OPT ------
+	// -----------------------------
+	
 	public void DeuxOpt() throws Exception {
-		 int size = m_instance.getNbCities();  
-		
-		 
+		m_solution.print(System.err);
+		long t = System.currentTimeMillis();
+		long tempspasse = 0;
+		while(tempspasse < m_timeLimit*1000) {
+			int size = m_instance.getNbCities();   
 		    // On répète jusqu'à qu'il n'y ait plus d'amélioration
 		    int amelioration = 0;
-		 
 		    while ( amelioration < 200 )
 		    {
-		        double meilleure_distance = m_solution.getCout(); 
-		        
+		        double meilleure_distance = m_solution.getCout();   
 		        for ( int i = 1; i < size - 1; i++ ) 
 		        {
 		            for ( int k = i + 1; k < size; k++) 
 		            {
 		            	Solution newm_solution=m_solution.copy();
-		            
-		                TwoOptSwap( i, k, newm_solution );
-		               
-		                double nouvelle_distance = newm_solution.getCout();
-		 
+		                swap( i, k, newm_solution );		               
+		                double nouvelle_distance = newm_solution.getCout();		 
 		                if ( nouvelle_distance < meilleure_distance ) 
 		                {
-		                    // on a amélioré le trajet donc on remet la variable à 0
-		                    amelioration = 0;
-		                                                 
+		                	// on a amélioré le trajet donc on remet la variable à 0
+		                    amelioration = 0;		                                                 
 		                    for (int j=0;j<size;j++)
 		                    {
 		                        m_solution.setCityPosition(newm_solution.getCity(j), j);
-		                    }
-		                         
-		                    meilleure_distance = nouvelle_distance;
-		                         
-		                   
-			                }
-		         
+		                    }		                         
+		                    meilleure_distance = nouvelle_distance;	                   
+			                }		         
 		            }
-		        }
-		 
+		        }		 
 		        amelioration ++;
+		        tempspasse = System.currentTimeMillis()-t;
 		    }
+		}
+		 
 	}
 	
-	public void TwoOptSwap( int i, int k, Solution newm_solution ) throws Exception {
+	public void swap( int i, int k, Solution newm_solution ) throws Exception {
 	    int size = m_instance.getNbCities();
-	 
 	    // 1. On recopie jusqu'à l'index i (index de la première ville qu'on veut inverser)
 	    for ( int c = 0; c < i; ++c )
 	    {
 	        newm_solution.setCityPosition( m_solution.getCity( c ),c );
-	    }
-	         
+	    } 
 	    // 2. On inverse l'ordre entre les villes d'index i et k
 	    int dec = 0;
 	    for ( int c = i; c < k+1; ++c )
@@ -243,7 +212,6 @@ public class TSPSolver {
 	        newm_solution.setCityPosition(  m_solution.getCity( k - dec ),c );
 	        dec++;
 	    }
-	 
 	    // 3. On rajoute les dernières villes après l'index k
 	    for ( int c = k + 1; c < size; ++c )
 	    {
