@@ -348,7 +348,7 @@ public class TSPSolver {
 		}
 		for(int i=0; i<nbVilles; i++) {
 			if(enfant.contains(individu_2.getCity(i))!=true) {
-				for(int j=0; j<nbVilles; j++) {
+				for(int j=1; j<nbVilles; j++) {
 					enfant.setCityPosition(j, individu_2.getCity(i));
 				}
 			}
@@ -370,7 +370,7 @@ public class TSPSolver {
 		for(int circuitPos1=1; circuitPos1<nbVilles; circuitPos1++) {
 			double random = Math.random();
 			if(random<tauxMutation) {
-				int circuitPos2 = (int)(nbVilles*random-1)+1;
+				int circuitPos2 = (int)((nbVilles-1)*Math.random())+1; //ne peut pas etre 0
 				int ville_1 = circuit.getTour()[circuitPos1];
 				int ville_2 = circuit.getTour()[circuitPos2];
 				circuit.setCityPosition(ville_1, circuitPos2);
@@ -407,6 +407,8 @@ public class TSPSolver {
 	 */
 	public void GeneticAlgorithm() throws Exception {
 		m_solution.print(System.err);
+		m_solution.setCityPosition(0, 0);
+		m_solution.setCityPosition(0, m_instance.getNbCities());
 /* Probabilité qu'une ville d'un circuit subisse une mutation. 
  * Cela correspond à l'inversion de la position de deux villes dans le circuit. 
  * Le taux est assez faible car la probabilité d'obtenir une distance plus faible en inversant deux ville est peu élevée */		
@@ -422,7 +424,7 @@ La sélection par tournoi fait affronter plusieurs individus sélectionnés au h
 		}
 		System.out.println("Distance finale: "+((Solution)getBestFitness(populationMere)[0]).getCout());
 		Solution meilleureSolution = (Solution)getBestFitness(populationMere)[0];
-		for (int i=0; i<m_instance.getNbCities(); i++) {
+		for (int i=1; i<m_instance.getNbCities(); i++) {
 			m_solution.setCityPosition(i, meilleureSolution.getCity(i));
 		}
 	}
