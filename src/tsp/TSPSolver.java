@@ -332,8 +332,8 @@ public class TSPSolver {
  */	
 	public Solution crossover(Solution individu_1, Solution individu_2) throws Exception {
 		int nbVilles = m_instance.getNbCities();
-		int start = (int)(Math.random()*nbVilles-1)+1;
-		int end = (int)(Math.random()*nbVilles-1)+1;
+		int start = (int)(Math.random()*(nbVilles-1))+1; //le +1 étant valeur minimale (on ne veut pas changer premier) pareil pour dernier
+		int end = (int)(Math.random()*(nbVilles-1))+1;
 		Solution enfant = new Solution(m_instance);
 		enfant.setCityPosition(0,0);
 		enfant.setCityPosition(0, nbVilles);
