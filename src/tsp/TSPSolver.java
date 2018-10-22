@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
+// TODO: Auto-generated Javadoc
 /**
  * 
  * This class is the place where you should enter your code and from which you can create your own objects.
@@ -40,7 +41,8 @@ public class TSPSolver {
 	// -----------------------------
 
 	/**
-	 * Creates an object of the class Solution for the problem data loaded in Instance
+	 * Creates an object of the class Solution for the problem data loaded in Instance.
+	 *
 	 * @param instance the instance of the problem
 	 * @param timeLimit the time limit in seconds
 	 */
@@ -74,10 +76,12 @@ public class TSPSolver {
 	// -- ALGORITHME PLUS PROCHE VOISIN --
 	// -----------------------------------	
 		
-	/** Première méthode que nous avons développée: un Local Search qui cherche de ville en ville la plus proche voisine.
+	/**
+	 *  Première méthode que nous avons développée: un Local Search qui cherche de ville en ville la plus proche voisine.
 	 * Appelle la méthode plusProcheVoisin(int ville_courante, boolean[] villes).
-	 * @throws Exception
+	 *
 	 * @version 1 (15/10/2018)
+	 * @throws Exception the exception
 	 */
 	public void localSearchPPV() throws Exception {
 		m_solution.print(System.err);
@@ -102,12 +106,14 @@ public class TSPSolver {
 		tempspasse=System.currentTimeMillis()-t;
 	}
 	
-	/** Un Local Search qui cherche de ville en ville la plus proche voisine, en partant de ville_depart.
+	/**
+	 *  Un Local Search qui cherche de ville en ville la plus proche voisine, en partant de ville_depart.
 	 * Appelle la méthode plusProcheVoisin(int ville_courante, boolean[] villes).
-	 * @param ville_depart Entier correspondant à l'indice de la ville de départ
-	 * @throws Exception
+	 *
 	 * @version 1 (16/10/2018)
-	 * */
+	 * @param ville_depart Entier correspondant à l'indice de la ville de départ
+	 * @throws Exception the exception
+	 */
 	public void localSearchPPV(int ville_depart) throws Exception {
 		m_solution.print(System.err);
 		long t = System.currentTimeMillis();
@@ -128,13 +134,15 @@ public class TSPSolver {
 		tempspasse=System.currentTimeMillis()-t;
 	}
 
-	/** Cette méthode cherche le Plus Proche Voisin non visité de ville_courante contenu dans tableau_villes.
+	/**
+	 *  Cette méthode cherche le Plus Proche Voisin non visité de ville_courante contenu dans tableau_villes.
+	 *
+	 * @version 1 (15/10/2018)
 	 * @param ville_courante Un entier correspondant à l'indice de la ville dont on cherche le PPV.
-	 * @param tableau_villes Un tableau de booléens de longueur m_instance.getNbCities(). 
+	 * @param tableau_villes Un tableau de booléens de longueur m_instance.getNbCities().
 	 * Si la ville i a déjà été visitée, ville[i]=true. Sinon, ville[i]=false.
 	 * @return Un entier correspondant à l'indice de la ville la plus proche de ville_courante non visitée.
-	 * @throws Exception
-	 * @version 1 (15/10/2018)
+	 * @throws Exception the exception
 	 */
 	public int plusProcheVoisin(int ville_courante, boolean[] tableau_villes) throws Exception {
 		int index = ville_courante;
@@ -159,10 +167,13 @@ public class TSPSolver {
 		return ville_proche;
 	}
 	
-	/** Cette méthode calcule le coût d'un trajet en appelant la méthode getTour() de la classe Solution. 
-	 * @throws Exception
+	/**
+	 *  Cette méthode calcule le coût d'un trajet en appelant la méthode getTour() de la classe Solution. 
+	 *
 	 * @version 1 (16/10/2018)
-	 * */
+	 * @return the cout
+	 * @throws Exception the exception
+	 */
 	public int getCout() throws Exception {
 		m_solution.print(System.err);
 		int res = 0;
@@ -177,10 +188,13 @@ public class TSPSolver {
 	// --- ALGORITHME GENETIQUE ----
 	// -----------------------------	
 	
-/** Cette méthode génère un chemin au hasard sur l'instance choisie.
- * @return Une solution au problème sur l'instance choisie
- * @version 1 (19/10/2018)
- * */
+/**
+	 *  Cette méthode génère un chemin au hasard sur l'instance choisie.
+	 *
+	 * @version 1 (19/10/2018)
+	 * @return Une solution au problème sur l'instance choisie
+	 * @throws Exception the exception
+	 */
 	public Solution generateSolutionRandom() throws Exception {
 		m_solution.print(System.err);
 		ArrayList<Integer> position = new ArrayList<Integer>();
@@ -198,11 +212,14 @@ public class TSPSolver {
 		
 	}
 	
-/** Cette méthode génère une population de chemins sur l'instance choisie
+/**
+ *  Cette méthode génère une population de chemins sur l'instance choisie.
+ *
+ * @version 1 (19/10/18)
  * @param taille_pop  La taille de population que l'on choisie
  * @return Un tableau de solutions random de taille que l'on a choisie
- * @version 1 (19/10/18)
- * */
+ * @throws Exception the exception
+ */
 	public Solution[] generatePopulation(int taille_pop) throws Exception{
 		m_solution.print(System.err);
 		Solution[] s = new Solution[taille_pop];
@@ -212,11 +229,14 @@ public class TSPSolver {
 		return s;
 	}
 	
-/** Cette méthode permet de trouver le chemin avec le coût minimum dans une population 
- * @param population Un tableau de solutions au problème 
+/**
+ *  Cette méthode permet de trouver le chemin avec le coût minimum dans une population .
+ *
+ * @version 1 (21/10/2018)
+ * @param population Un tableau de solutions au problème
  * @return L'indice dans le tableau entré en paramètre de la ville ayant le coût minimum
- * @version 1 (21/10/2018) 
- * */
+ * @throws Exception the exception
+ */
 	public Object[] getBestFitness(Solution[] population) throws Exception {
 		m_solution.print(System.err);
 		long minimum = population[0].getCout();
@@ -233,6 +253,16 @@ public class TSPSolver {
 		return resultat;
 	}
 	
+	/**
+	 * Evolution.
+	 *
+	 * @param population the population
+	 * @param taillepop the taillepop
+	 * @param tailleTournoi the taille tournoi
+	 * @param tauxMutation the taux mutation
+	 * @return the solution[]
+	 * @throws Exception the exception
+	 */
 	public Solution[] evolution(Solution[] population, int taillepop, int tailleTournoi, double tauxMutation) throws Exception {
 		m_solution.print(System.err);
 		Solution[] nouvelle_pop = generatePopulation(taillepop);
@@ -249,17 +279,23 @@ public class TSPSolver {
 		return nouvelle_pop;
 	}
 	
-/** Etape 2: 
- * Cette méthode retourne l'enfant de deux individus que l'on a choisi de reproduire 
- * @param individu_1
- * @param individu_2
- * @version 1 (21/10/2018) 
- * */	
+/**
+ *  Etape 2: 
+ * Cette méthode retourne l'enfant de deux individus que l'on a choisi de reproduire .
+ *
+ * @version 1 (21/10/2018)
+ * @param individu_1 the individu 1
+ * @param individu_2 the individu 2
+ * @return the solution
+ * @throws Exception the exception
+ */	
 	public Solution crossover(Solution individu_1, Solution individu_2) throws Exception {
 		int start = (int)(Math.random()*individu_1.getTour().length);
 		int end = (int)(Math.random()*individu_2.getTour().length);
 		Solution enfant = new Solution(m_instance);
-		int[] villes_enfant = enfant.getTour();
+		for(int i=0; i<enfant.getTour().length; i++) {
+			enfant.getTour()[i]=m_instance.getNbCities()+1;
+		}
 		
 		for(int i=0; i<enfant.getTour().length; i++) {
 			if(start<end && i>start && i<end) {
@@ -272,10 +308,24 @@ public class TSPSolver {
 		}
 		
 		for(int i=0; i<individu_2.getTour().length; i++) {
+			if(enfant.contains(individu_2.getCity(i))!=true) {
+				for(int j=0; j<enfant.getTour().length; j++) {
+					if(enfant.getCity(j)==m_instance.getNbCities()+1) {
+						enfant.setCityPosition(j, individu_2.getCity(i));
+					}
+				}
+			}
 		}
 		return enfant;
 	}
 	
+	/**
+	 * Muter.
+	 *
+	 * @param circuit the circuit
+	 * @param tauxMutation the taux mutation
+	 * @throws Exception the exception
+	 */
 	public void muter(Solution circuit, double tauxMutation) throws Exception {
 		m_solution.print(System.err);
 		for(int circuitPos1=0; circuitPos1<circuit.getTour().length; circuitPos1++) {
@@ -290,13 +340,16 @@ public class TSPSolver {
 		}
 	}
 	
-/** Etape 3:
- * Cette méthode retourne le meilleur circuit du tournoi
+/**
+ *  Etape 3:
+ * Cette méthode retourne le meilleur circuit du tournoi.
+ *
+ * @version 1 (21/10/2018)
  * @param population Notre population où effectuer le tournoi
  * @param tailleTournoi Le nombre de participants au tournoi
  * @return fittest Le meilleur circuit du tournoi
- * @version 1 (21/10/2018)
- * */ 
+ * @throws Exception the exception
+ */ 
 	public Solution tournoi(Solution[] population, int tailleTournoi) throws Exception {
 		m_solution.print(System.err);
 		Solution[] tournoi = new Solution[tailleTournoi];
@@ -308,6 +361,11 @@ public class TSPSolver {
 		return fittest;
 	}
 	
+	/**
+	 * Genetic algorithm.
+	 *
+	 * @throws Exception the exception
+	 */
 	public void GeneticAlgorithm() throws Exception {
 		m_solution.print(System.err);
 /* Probabilité qu'une ville d'un circuit subisse une mutation. 
@@ -324,17 +382,29 @@ La sélection par tournoi fait affronter plusieurs individus sélectionnés au h
 	// ----- GETTERS / SETTERS -----
 	// -----------------------------
 
-	/** @return the problem Solution */
+	/**
+	 * Gets the solution.
+	 *
+	 * @return the problem Solution
+	 */
 	public Solution getSolution() {
 		return m_solution;
 	}
 
-	/** @return problem data */
+	/**
+	 * Gets the single instance of TSPSolver.
+	 *
+	 * @return problem data
+	 */
 	public Instance getInstance() {
 		return m_instance;
 	}
 
-	/** @return Time given to solve the problem */
+	/**
+	 * Gets the time limit.
+	 *
+	 * @return Time given to solve the problem
+	 */
 	public long getTimeLimit() {
 		return m_timeLimit;
 	}
@@ -348,7 +418,8 @@ La sélection par tournoi fait affronter plusieurs individus sélectionnés au h
 	}
 
 	/**
-	 * Sets the problem data
+	 * Sets the problem data.
+	 *
 	 * @param instance the Instance object which contains the data.
 	 */
 	public void setInstance(Instance instance) {
