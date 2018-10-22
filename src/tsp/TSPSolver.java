@@ -68,7 +68,8 @@ public class TSPSolver {
 
 	public void solve() throws Exception
 	{
-		GeneticAlgorithm();
+		localSearchPPV();
+		DeuxOpt();
 	}
 	
 	// -----------------------------------
@@ -165,11 +166,11 @@ public class TSPSolver {
 		m_solution.print(System.err);
 		long t = System.currentTimeMillis();
 		long tempspasse = 0;
-		while(tempspasse < m_timeLimit*1000) {
-			int size = m_instance.getNbCities();   
+		while(tempspasse<m_timeLimit) {
+		int size = m_instance.getNbCities();   
 		    // On répète jusqu'à qu'il n'y ait plus d'amélioration
 		    int amelioration = 0;
-		    while ( amelioration < 200 )
+		    while ( amelioration < 100 )
 		    {
 		        double meilleure_distance = m_solution.getCout();   
 		        for ( int i = 1; i < size - 1; i++ ) 
