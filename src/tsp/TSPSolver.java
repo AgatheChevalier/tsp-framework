@@ -166,6 +166,7 @@ public class TSPSolver {
 		return ville_proche;
 	}
 	
+	
 	/**
 	 *  Cette méthode calcule le coût d'un trajet en appelant la méthode getTour() de la classe Solution. 
 	 *
@@ -182,6 +183,73 @@ public class TSPSolver {
 		res = res+(int)(m_instance.getDistances(m_solution.getTour()[m_solution.getTour().length-1], m_solution.getTour()[0]));
 		return res;
 	}	
+	
+	public void DeuxOpt() throws Exception {
+		 int size = m_instance.getNbCities();  
+		
+		 
+		    // On répète jusqu'à qu'il n'y ait plus d'amélioration
+		    int amelioration = 0;
+		 
+		    while ( amelioration < 200 )
+		    {
+		        double meilleure_distance = m_solution.getCout(); 
+		        
+		        for ( int i = 1; i < size - 1; i++ ) 
+		        {
+		            for ( int k = i + 1; k < size; k++) 
+		            {
+		            	Solution newm_solution=m_solution.copy();
+		            
+		                TwoOptSwap( i, k, newm_solution );
+		               
+		                double nouvelle_distance = newm_solution.getCout();
+		 
+		                if ( nouvelle_distance < meilleure_distance ) 
+		                {
+		                    // on a amélioré le trajet donc on remet la variable à 0
+		                    amelioration = 0;
+		                                                 
+		                    for (int j=0;j<size;j++)
+		                    {
+		                        m_solution.setCityPosition(newm_solution.getCity(j), j);
+		                    }
+		                         
+		                    meilleure_distance = nouvelle_distance;
+		                         
+		                   
+			                }
+		         
+		            }
+		        }
+		 
+		        amelioration ++;
+		    }
+	}
+	
+	public void TwoOptSwap( int i, int k, Solution newm_solution ) throws Exception {
+	    int size = m_instance.getNbCities();
+	 
+	    // 1. On recopie jusqu'à l'index i (index de la première ville qu'on veut inverser)
+	    for ( int c = 0; c < i; ++c )
+	    {
+	        newm_solution.setCityPosition( m_solution.getCity( c ),c );
+	    }
+	         
+	    // 2. On inverse l'ordre entre les villes d'index i et k
+	    int dec = 0;
+	    for ( int c = i; c < k+1; ++c )
+	    {
+	        newm_solution.setCityPosition(  m_solution.getCity( k - dec ),c );
+	        dec++;
+	    }
+	 
+	    // 3. On rajoute les dernières villes après l'index k
+	    for ( int c = k + 1; c < size; ++c )
+	    {
+	        m_solution.setCityPosition( m_solution.getCity( c ),c );
+	    }
+	}
 
 	// -----------------------------
 	// --- ALGORITHME GENETIQUE ----
