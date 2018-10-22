@@ -68,8 +68,7 @@ public class TSPSolver {
 
 	public void solve() throws Exception
 	{
-		localSearchPPV();
-		DeuxOpt();
+		System.out.println(generateSolutionRandom().isFeasible());
 	}
 	
 	// -----------------------------------
@@ -237,10 +236,17 @@ public class TSPSolver {
 		for (int i=0; i<m_instance.getNbCities(); i++) {
 			position.add(i);
 		}
-		Collections.shuffle(position);
-		int compt=0;
+		
+		ArrayList<Integer> temp = new ArrayList<Integer>();
+		for(int i=1; i<m_instance.getNbCities(); i++) {
+			temp.add(i);
+		}
+		Collections.shuffle(temp);
+		
+		m_solution.setCityPosition(0, 0);
+		int compt=1;
 		while (compt<m_instance.getNbCities()) {
-			m_solution.setCityPosition(position.get(compt), compt);
+			m_solution.setCityPosition(temp.get(compt-1), compt);
 			compt++;
 		}
 		m_solution.setCityPosition(position.get(0), m_instance.getNbCities());
