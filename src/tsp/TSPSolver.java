@@ -383,7 +383,7 @@ La sélection par tournoi fait affronter plusieurs individus sélectionnés au h
 		}
 		System.out.println("Distance finale: "+((Solution)getBestFitness(populationMere)[0]).getCout());
 		Solution meilleureSolution = (Solution)getBestFitness(populationMere)[0];
-		m_solution = meilleureSolution;
+		m_solution = meilleureSolution; 
 	}
 
 	// -----------------------------
