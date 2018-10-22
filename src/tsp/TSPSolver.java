@@ -68,7 +68,8 @@ public class TSPSolver {
 
 	public void solve() throws Exception
 	{
-		System.out.println(generateSolutionRandom().isFeasible());
+		//System.out.println(generateSolutionRandom().isFeasible());
+		GeneticAlgorithm();
 	}
 	
 	// -----------------------------------
@@ -243,7 +244,7 @@ public class TSPSolver {
 			m_solution.setCityPosition(temp.get(compt-1), compt);
 			compt++;
 		}
-		m_solution.setCityPosition(temp.get(0), m_instance.getNbCities());
+		m_solution.setCityPosition(0, m_instance.getNbCities());
 		return m_solution;
 		
 	}
@@ -326,14 +327,14 @@ public class TSPSolver {
  * @throws Exception the exception
  */	
 	public Solution crossover(Solution individu_1, Solution individu_2) throws Exception {
-		int start = (int)(Math.random()*individu_1.getTour().length);
-		int end = (int)(Math.random()*individu_2.getTour().length);
+		int nbVilles = m_instance.getNbCities();
+		int start = (int)(Math.random()*nbVilles);
+		int end = (int)(Math.random()*nbVilles);
 		Solution enfant = new Solution(m_instance);
-		for(int i=0; i<enfant.getTour().length; i++) {
-			enfant.getTour()[i]=m_instance.getNbCities()+1;
-		}
-		
-		for(int i=0; i<enfant.getTour().length; i++) {
+		//for(int i=0; i<nbVilles; i++) {
+			//enfant.setCityPosition(i,m_instance.getNbCities()+1);
+		//}
+		for(int i=0; i<nbVilles; i++) {
 			if(start<end && i>start && i<end) {
 				enfant.setCityPosition(i, individu_1.getCity(i));
 			} else if(start>end) {
@@ -343,16 +344,16 @@ public class TSPSolver {
 			}
 		}
 		
-		for(int i=0; i<individu_2.getTour().length; i++) {
+		for(int i=0; i<nbVilles; i++) {
 			if(enfant.contains(individu_2.getCity(i))!=true) {
-				for(int j=0; j<enfant.getTour().length; j++) {
-					if(enfant.getCity(j)==m_instance.getNbCities()+1) {
+				for(int j=0; j<nbVilles; j++) {
+					//if(enfant.getCity(j)==m_instance.getNbCities()+1) {
 						enfant.setCityPosition(j, individu_2.getCity(i));
-					}
+					//}
 				}
 			}
 		}
-		enfant.setCityPosition(enfant.getTour()[0], enfant.getTour().length);
+		enfant.setCityPosition(0, m_instance.getNbCities());
 		return enfant;
 	}
 	
@@ -365,10 +366,11 @@ public class TSPSolver {
 	 */
 	public void muter(Solution circuit, double tauxMutation) throws Exception {
 		m_solution.print(System.err);
-		for(int circuitPos1=0; circuitPos1<circuit.getTour().length; circuitPos1++) {
+		int nbVilles = m_instance.getNbCities();
+		for(int circuitPos1=0; circuitPos1<nbVilles; circuitPos1++) {
 			double random = Math.random();
 			if(random<tauxMutation) {
-				int circuitPos2 = (int)(circuit.getTour().length*random);
+				int circuitPos2 = (int)(nbVilles*random);
 				int ville_1 = circuit.getTour()[circuitPos1];
 				int ville_2 = circuit.getTour()[circuitPos2];
 				circuit.setCityPosition(ville_1, circuitPos2);
