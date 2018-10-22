@@ -263,9 +263,9 @@ public class TSPSolver {
 	 * @return the solution[]
 	 * @throws Exception the exception
 	 */
-	public Solution[] evolution(Solution[] population, int taillepop, int tailleTournoi, double tauxMutation) throws Exception {
+	public Solution[] evolution(Solution[] population, int tailleTournoi, double tauxMutation) throws Exception {
 		m_solution.print(System.err);
-		Solution[] nouvelle_pop = generatePopulation(taillepop);
+		Solution[] nouvelle_pop = generatePopulation(population.length);
 		nouvelle_pop[(int)getBestFitness(population)[1]] = (Solution)getBestFitness(population)[0]; // On enregistre le meilleur circuit de notre ancienne population
 		for(int i=0; i<nouvelle_pop.length; i++) {
 			Solution parent1 = tournoi(population,tailleTournoi);
@@ -353,7 +353,7 @@ public class TSPSolver {
 	public Solution tournoi(Solution[] population, int tailleTournoi) throws Exception {
 		m_solution.print(System.err);
 		Solution[] tournoi = new Solution[tailleTournoi];
-		for(int i=0; i<= tailleTournoi; i++) {
+		for(int i=0; i< tailleTournoi; i++) {
 			int random = (int)(Math.random()*population.length);
 			tournoi[i] = population[random];
 		}
