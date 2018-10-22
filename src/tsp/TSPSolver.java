@@ -231,25 +231,19 @@ public class TSPSolver {
 	 * @throws Exception the exception
 	 */
 	public Solution generateSolutionRandom() throws Exception {
-		m_solution.print(System.err);
-		ArrayList<Integer> position = new ArrayList<Integer>();
-		for (int i=0; i<m_instance.getNbCities(); i++) {
-			position.add(i);
-		}
-		
+		m_solution.print(System.err);		
 		ArrayList<Integer> temp = new ArrayList<Integer>();
 		for(int i=1; i<m_instance.getNbCities(); i++) {
 			temp.add(i);
 		}
 		Collections.shuffle(temp);
-		
 		m_solution.setCityPosition(0, 0);
 		int compt=1;
 		while (compt<m_instance.getNbCities()) {
 			m_solution.setCityPosition(temp.get(compt-1), compt);
 			compt++;
 		}
-		m_solution.setCityPosition(position.get(0), m_instance.getNbCities());
+		m_solution.setCityPosition(temp.get(0), m_instance.getNbCities());
 		return m_solution;
 		
 	}
