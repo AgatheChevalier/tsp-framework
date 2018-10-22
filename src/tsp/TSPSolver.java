@@ -255,20 +255,24 @@ public class TSPSolver {
  * @param individu_2
  * @version 1 (21/10/2018) 
  * */	
-	public Solution crossover(Solution individu_1, Solution individu_2) {
-		int indiceCrossover_1 = (int)((individu_1.getTour().length-1)*0.33);
-		int indiceCrossover_2 = (int)((individu_1.getTour().length-1)*0.33);
+	public Solution crossover(Solution individu_1, Solution individu_2) throws Exception {
+		int start = (int)(Math.random()*individu_1.getTour().length);
+		int end = (int)(Math.random()*individu_2.getTour().length);
 		Solution enfant = new Solution(m_instance);
 		int[] villes_enfant = enfant.getTour();
-		for(int i=0; i<indiceCrossover_1; i++) {
-			villes_enfant[i] = individu_1.getTour()[i];
+		
+		for(int i=0; i<enfant.getTour().length; i++) {
+			if(start<end && i>start && i<end) {
+				enfant.setCityPosition(i, individu_1.getCity(i));
+			} else if(start>end) {
+				if (i>end && i<start) {
+					enfant.setCityPosition(i, individu_1.getCity(i));
+				}
+			}
 		}
-		for(int i=indiceCrossover_1; i<indiceCrossover_2; i++) {
-			villes_enfant[i] = individu_2.getTour()[i];
+		
+		for(int i=0; i<individu_2.getTour().length; i++) {
 		}
-		for(int i=indiceCrossover_2; i<villes_enfant.length; i++) {
-			villes_enfant[i] = individu_1.getTour()[i];
-		}		
 		return enfant;
 	}
 	
