@@ -332,8 +332,8 @@ public class TSPSolver {
  */	
 	public Solution crossover(Solution individu_1, Solution individu_2) throws Exception {
 		int nbVilles = m_instance.getNbCities();
-		int start = (int)(Math.random()*(nbVilles-1))+1; //le +1 étant valeur minimale (on ne veut pas changer premier) pareil pour dernier
-		int end = (int)(Math.random()*(nbVilles-1))+1;
+		int start = ((int)(Math.random()*(nbVilles-1)))+1; //le +1 étant valeur minimale (on ne veut pas changer premier) pareil pour dernier
+		int end = ((int)(Math.random()*(nbVilles-1)))-1;
 		Solution enfant = new Solution(m_instance);
 		enfant.setCityPosition(0,0);
 		enfant.setCityPosition(0, nbVilles);
@@ -370,7 +370,7 @@ public class TSPSolver {
 		for(int circuitPos1=1; circuitPos1<nbVilles; circuitPos1++) {
 			double random = Math.random();
 			if(random<tauxMutation) {
-				int circuitPos2 = (int)((nbVilles-1)*Math.random())+1; //ne peut pas etre 0
+				int circuitPos2 = ((int)((nbVilles-1)*Math.random()))+1; //ne peut pas etre 0
 				int ville_1 = circuit.getTour()[circuitPos1];
 				int ville_2 = circuit.getTour()[circuitPos2];
 				circuit.setCityPosition(ville_1, circuitPos2);
@@ -382,7 +382,6 @@ public class TSPSolver {
 /**
  *  Etape 3:
  * Cette méthode retourne le meilleur circuit du tournoi.
- *
  * @version 1 (21/10/2018)
  * @param population Notre population où effectuer le tournoi
  * @param tailleTournoi Le nombre de participants au tournoi
@@ -419,7 +418,7 @@ La sélection par tournoi fait affronter plusieurs individus sélectionnés au h
 		
 		Solution[] populationMere = generatePopulation(50);
 		System.out.println("Distance initale: "+((Solution)getBestFitness(populationMere)[0]).getCout());
-		for(int i=0; i<100; i++) {
+		for(int i=0; i<10; i++) {
 			populationMere = evolution(populationMere, tailleTournoi, tauxMutation);
 		}
 		System.out.println("Distance finale: "+((Solution)getBestFitness(populationMere)[0]).getCout());
