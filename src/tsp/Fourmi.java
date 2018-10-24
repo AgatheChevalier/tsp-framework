@@ -38,5 +38,9 @@ public class Fourmi {
 	public void choixDeVilleSuivante () {
 		// probabilité de choisir une ville proportionnelle à la quantité de phéromones présents sur le chemin qui mène à cette ville
 	}
+	
+	public double visibilite (int villeA, int villeB) throws Exception {
+		return 1/distance(villeA, villeB);
+	}
 
 }
