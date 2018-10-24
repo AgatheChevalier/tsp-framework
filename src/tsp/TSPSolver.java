@@ -352,20 +352,14 @@ public class TSPSolver {
 		individu_1.print(System.err);
 		individu_2.print(System.err);
 		int nbVilles = m_instance.getNbCities();
-		int start = ((int)(Math.random()*(nbVilles-1)))+1; //le +1 étant valeur minimale (on ne veut pas changer premier) pareil pour dernier
-		int end = ((int)(Math.random()*(nbVilles-1)))+1;
+		int start = ((int)(Math.random()*((nbVilles/2)-1)))+1; //le +1 étant valeur minimale (on ne veut pas changer premier) pareil pour dernier
+		int end = ((int)(Math.random()*((nbVilles-1)-((nbVilles/2)+1))));
 		Solution enfant = new Solution(m_instance);
 		enfant.setCityPosition(0,0);
 		enfant.setCityPosition(0, nbVilles);
-		for(int i=0; i<nbVilles; i++) {
-			if(start<end && i>start && i<end) {
-				enfant.setCityPosition(i, individu_1.getCity(i));
-			} else if(start>end) {
-				if (i>end && i<start) {
-					enfant.setCityPosition(i, individu_1.getCity(i));
-				}
+		for(int i=start; i<end; i++) {
+			enfant.setCityPosition(i, individu_1.getCity(i));
 			}
-		}
 		for(int i=0; i<nbVilles; i++) {
 			if(enfant.contains(individu_2.getCity(i))!=true) {
 				for(int j=1; j<nbVilles; j++) {
@@ -373,7 +367,6 @@ public class TSPSolver {
 				}
 			}
 		}
-		enfant.setCityPosition(0, m_instance.getNbCities());
 		System.out.println("l'enfant");
 		enfant.print(System.err);
 		return enfant;
