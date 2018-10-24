@@ -248,8 +248,8 @@ public class TSPSolver {
 			compt++;
 		}
 		m_solution.setCityPosition(0, m_instance.getNbCities());
-		System.out.println("Solution random : ");
-		m_solution.print(System.err);
+		//System.out.println("Solution random : ");
+		//m_solution.print(System.err);
 		return m_solution;
 	}
 	
@@ -263,9 +263,13 @@ public class TSPSolver {
  */
 	public Solution[] generatePopulation(int taille_pop) throws Exception{
 		Solution[] s = new Solution[taille_pop];
+		System.out.println("population mère random : ");
 		for(int i=0; i<s.length; i++) {
 			s[i]=generateSolutionRandom();
+			System.out.println("individu "+i);
+			s[i].print(System.err);
 		}
+			
 		return s;
 	}
 	
@@ -288,6 +292,7 @@ public class TSPSolver {
 		}
 		Object[] resultat = new Object[2];
 		resultat[0] = population[indice];
+		((Solution)(resultat[0])).print(System.err);
 		resultat[1] = indice;
 		return resultat;
 	}
