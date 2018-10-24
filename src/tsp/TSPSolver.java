@@ -406,8 +406,6 @@ public class TSPSolver {
 	 */
 	public void GeneticAlgorithm() throws Exception {
 		m_solution.print(System.err);
-		m_solution.setCityPosition(0, 0);
-		m_solution.setCityPosition(0, m_instance.getNbCities());
 /* Probabilité qu'une ville d'un circuit subisse une mutation. 
  * Cela correspond à l'inversion de la position de deux villes dans le circuit. 
  * Le taux est assez faible car la probabilité d'obtenir une distance plus faible en inversant deux ville est peu élevée */		
@@ -423,9 +421,11 @@ La sélection par tournoi fait affronter plusieurs individus sélectionnés au h
 		}
 		System.out.println("Distance finale: "+((Solution)getBestFitness(populationMere)[0]).getCout());
 		Solution meilleureSolution = (Solution)getBestFitness(populationMere)[0];
-		for (int i=1; i<m_instance.getNbCities(); i++) {
+		for (int i=1; i<m_instance.getNbCities()-1; i++) {
 			m_solution.setCityPosition(i, meilleureSolution.getCity(i));
-		}
+		} 
+		m_solution.setCityPosition(0, 0);
+		m_solution.setCityPosition(0, m_instance.getNbCities());
 	}
 
 	// -----------------------------
