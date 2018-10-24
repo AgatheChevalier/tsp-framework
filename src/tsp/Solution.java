@@ -309,7 +309,7 @@ public class Solution {
 	public boolean contains(int Ville) {
 		boolean trouve = false;
 		int compt=0;
-		while (!trouve && compt<this.getTour().length) {
+		while (compt<this.getTour().length && trouve==false) {
 			if (this.getTour()[compt]==Ville) {
 				trouve=true;
 			} else {
