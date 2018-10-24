@@ -10,7 +10,7 @@ public class Fourmi extends Pheromones{
 	//liste des villes visitées par la fourmi
 	private double[][] qte_pheromone;	
 	//quantité de phéromones laissé par la fourmi sur chaque arc
-	private double[][] qte_init;
+	
 	private Instance m_instance;
 	
 	
