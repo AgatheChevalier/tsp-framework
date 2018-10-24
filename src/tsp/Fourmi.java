@@ -34,5 +34,9 @@ public class Fourmi {
 	public void depot_pheromones() {
 		
 	}
+	
+	public void choixDeVilleSuivante () {
+		// probabilité de choisir une ville proportionnelle à la quantité de phéromones présents sur le chemin qui mène à cette ville
+	}
 
 }
