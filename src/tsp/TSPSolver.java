@@ -426,6 +426,7 @@ La sélection par tournoi fait affronter plusieurs individus sélectionnés au h
 		} 
 		m_solution.setCityPosition(0, 0);
 		m_solution.setCityPosition(0, m_instance.getNbCities());
+		
 	}
 
 	// -----------------------------
