@@ -237,20 +237,21 @@ public class TSPSolver {
 	 */
 	public Solution generateSolutionRandom() throws Exception {		
 		ArrayList<Integer> temp = new ArrayList<Integer>();
+		Solution m_sol = new Solution(m_instance);
 		for(int i=1; i<m_instance.getNbCities(); i++) {
 			temp.add(i);
 		}
 		Collections.shuffle(temp);
-		m_solution.setCityPosition(0, 0);
+		m_sol.setCityPosition(0, 0);
 		int compt=1;
 		while (compt<m_instance.getNbCities()) {
-			m_solution.setCityPosition(temp.get(compt-1), compt);
+			m_sol.setCityPosition(temp.get(compt-1), compt);
 			compt++;
 		}
-		m_solution.setCityPosition(0, m_instance.getNbCities());
+		m_sol.setCityPosition(0, m_instance.getNbCities());
 		//System.out.println("Solution random : ");
 		//m_solution.print(System.err);
-		return m_solution;
+		return m_sol;
 	}
 	
 /**
@@ -267,7 +268,12 @@ public class TSPSolver {
 		for(int i=0; i<s.length; i++) {
 			s[i]=generateSolutionRandom();
 			System.out.println("individu "+i);
+			/*for(int j=0;j<s.length;j++) {
+				System.out.println(s[i]);
+			}*/
+			s[i].evaluate();
 			s[i].print(System.err);
+			
 		}
 			
 		return s;
@@ -281,7 +287,7 @@ public class TSPSolver {
  * @return L'indice dans le tableau entré en paramètre de la ville ayant le coût minimum
  * @throws Exception the exception
  */
-	public Object[] getBestFitness(Solution[] population) throws Exception {
+	public Solution getBestFitness(Solution[] population) throws Exception {
 		double minimum = population[0].getCout();
 		int indice = 0;
 		for(int i=0; i<population.length; i++) {
@@ -290,11 +296,15 @@ public class TSPSolver {
 				indice = i;
 			}
 		}
-		Object[] resultat = new Object[2];
-		resultat[0] = population[indice];
-		((Solution)(resultat[0])).print(System.err);
-		resultat[1] = indice;
-		return resultat;
+		if (population[indice].isFeasible()) {
+			System.out.println("le meilleur de la population ");
+			population[indice].print(System.err);
+			return population[indice];
+		} else {
+			return population[1];
+		}
+		
+		
 	}
 	
 	/**
@@ -309,8 +319,8 @@ public class TSPSolver {
 	 */
 	public Solution[] evolution(Solution[] population, int tailleTournoi, double tauxMutation) throws Exception {
 		Solution[] nouvelle_pop = new Solution[population.length];
-		nouvelle_pop[(int)getBestFitness(population)[1]] = (Solution)getBestFitness(population)[0]; // On enregistre le meilleur circuit de notre ancienne population
-		for(int i=0; i<nouvelle_pop.length; i++) {
+		nouvelle_pop[0] = getBestFitness(population); // On enregistre le meilleur circuit de notre ancienne population
+		for(int i=1; i<nouvelle_pop.length; i++) {
 			Solution parent1 = tournoi(population,tailleTournoi);
 			Solution parent2 = tournoi(population,tailleTournoi);
 			Solution enfant = crossover(parent1,parent2);
@@ -318,6 +328,11 @@ public class TSPSolver {
 		} 
 		for(int i=0; i<nouvelle_pop.length; i++) {
 			muter(nouvelle_pop[i], tauxMutation);
+		}
+		System.out.println("la génération suivante :");
+		for (int i=0; i<nouvelle_pop.length; i++) {
+			System.out.println("individu"+i);
+			nouvelle_pop[i].print(System.err);
 		}
 		return nouvelle_pop;
 	}
@@ -333,9 +348,12 @@ public class TSPSolver {
  * @throws Exception the exception
  */	
 	public Solution crossover(Solution individu_1, Solution individu_2) throws Exception {
+		System.out.println("les parents");
+		individu_1.print(System.err);
+		individu_2.print(System.err);
 		int nbVilles = m_instance.getNbCities();
 		int start = ((int)(Math.random()*(nbVilles-1)))+1; //le +1 étant valeur minimale (on ne veut pas changer premier) pareil pour dernier
-		int end = ((int)(Math.random()*(nbVilles-1)))-1;
+		int end = ((int)(Math.random()*(nbVilles-1)))+1;
 		Solution enfant = new Solution(m_instance);
 		enfant.setCityPosition(0,0);
 		enfant.setCityPosition(0, nbVilles);
@@ -356,7 +374,10 @@ public class TSPSolver {
 			}
 		}
 		enfant.setCityPosition(0, m_instance.getNbCities());
+		System.out.println("l'enfant");
+		enfant.print(System.err);
 		return enfant;
+		
 	}
 	
 	/**
@@ -391,11 +412,19 @@ public class TSPSolver {
  */ 
 	public Solution tournoi(Solution[] population, int tailleTournoi) throws Exception {
 		Solution[] tournoi = new Solution[tailleTournoi];
+		System.out.println("la population juste avant le tournoi");
+		for (int i=0; i<population.length; i++) {
+			population[i].print(System.err);
+		}
 		for(int i=0; i< tailleTournoi; i++) {
 			int random = (int)(Math.random()*population.length);
 			tournoi[i] = population[random];
+			System.out.println("l'indivdu "+i+" dans le tournoi de taille "+tailleTournoi);
+			tournoi[i].print(System.err);
 		}
-		Solution fittest = (Solution)((getBestFitness(tournoi))[0]);
+		Solution fittest = getBestFitness(tournoi);
+		System.out.println("le vainqueur du tournoi : ");
+		fittest.print(System.err);
 		return fittest;
 	}
 	
@@ -414,11 +443,11 @@ La sélection par tournoi fait affronter plusieurs individus sélectionnés au h
 		int tailleTournoi = 5;
 		
 		Solution[] populationMere = generatePopulation(10);
-		for(int i=0; i<2; i++) {
+		for(int i=0; i<1; i++) {
 			Solution[] populationFille = evolution(populationMere, tailleTournoi, tauxMutation);
 			populationMere = populationFille;
 		}
-		Solution meilleureSolution = (Solution)((getBestFitness(populationMere))[0]);
+		Solution meilleureSolution =getBestFitness(populationMere);
 		for (int i=1; i<m_instance.getNbCities()-1; i++) {
 			m_solution.setCityPosition(i, meilleureSolution.getCity(i));
 		} 
