@@ -280,7 +280,7 @@ public class TSPSolver {
  */
 	public Object[] getBestFitness(Solution[] population) throws Exception {
 		m_solution.print(System.err);
-		long minimum = population[0].getCout();
+		double minimum = population[0].getCout();
 		int indice = 0;
 		for(int i=0; i<population.length; i++) {
 			if(population[i].getCout()<minimum) {
@@ -395,7 +395,7 @@ public class TSPSolver {
 			int random = (int)(Math.random()*population.length);
 			tournoi[i] = population[random];
 		}
-		Solution fittest = (Solution)getBestFitness(tournoi)[0];
+		Solution fittest = (Solution)((getBestFitness(tournoi))[0]);
 		return fittest;
 	}
 	
@@ -415,12 +415,12 @@ La sélection par tournoi fait affronter plusieurs individus sélectionnés au h
 		int tailleTournoi = 5;
 		
 		Solution[] populationMere = generatePopulation(50);
-		System.out.println("Distance initale: "+((Solution)getBestFitness(populationMere)[0]).getCout());
-		for(int i=0; i<10; i++) {
-			populationMere = evolution(populationMere, tailleTournoi, tauxMutation);
+		for(int i=0; i<50; i++) {
+			Solution[] populationFille = evolution(populationMere, tailleTournoi, tauxMutation);
+			populationMere = populationFille;
+			
 		}
-		System.out.println("Distance finale: "+((Solution)getBestFitness(populationMere)[0]).getCout());
-		Solution meilleureSolution = (Solution)getBestFitness(populationMere)[0];
+		Solution meilleureSolution = (Solution)((getBestFitness(populationMere))[0]);
 		for (int i=1; i<m_instance.getNbCities()-1; i++) {
 			m_solution.setCityPosition(i, meilleureSolution.getCity(i));
 		} 

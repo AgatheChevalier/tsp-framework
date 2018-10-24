@@ -292,13 +292,14 @@ public class Solution {
 	 * @throws Exception
 	 * @version 2 (19/10/2018)
 	 * */
-	public int getCout() throws Exception {
-		int res = 0;
+	public double getCout() throws Exception {
+	/*	int res = 0;
 		for(int i=0; i<m_cities.length-1; i++) {
 			res = res + (int)(m_instance.getDistances(m_cities[i], m_cities[i+1]));
 		}
 		res = res+(int)(m_instance.getDistances(m_cities[m_cities.length-1], m_cities[0]));
-		return res;
+		return res; */
+		return evaluate();
 	}	
 	
 	public boolean contains(int Ville) throws Exception {
