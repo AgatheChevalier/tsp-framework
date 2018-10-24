@@ -294,33 +294,23 @@ public class Solution {
 	 * */
 	public int getCout() throws Exception {
 		int res = 0;
-		for(int i=0; i<getTour().length-1; i++) {
-			res = res + (int)(m_instance.getDistances(getTour()[i], getTour()[i+1]));
+		for(int i=0; i<m_cities.length-1; i++) {
+			res = res + (int)(m_instance.getDistances(m_cities[i], m_cities[i+1]));
 		}
-		res = res+(int)(m_instance.getDistances(getTour()[getTour().length-1], getTour()[0]));
+		res = res+(int)(m_instance.getDistances(m_cities[m_cities.length-1], m_cities[0]));
 		return res;
 	}	
 	
-	public double getFitness() throws Exception {
-		return( 1/this.getCout() );
-	}
-	
-	
-	public boolean contains(int Ville) {
+	public boolean contains(int Ville) throws Exception {
 		boolean trouve = false;
 		int compt=0;
-		while (compt<this.getTour().length && trouve==false) {
-			if (this.getTour()[compt]==Ville) {
+		while (compt<m_cities.length && trouve==false) {
+			if (this.getCity(compt)==Ville) {
 				trouve=true;
 			} else {
 				compt++;
 			}
 		}
 		return trouve;
-	}
-	
-	public Solution genererSolution() {
-		Solution s = new Solution(m_instance);
-		return s;
 	}
 }
