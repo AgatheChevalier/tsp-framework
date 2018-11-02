@@ -69,8 +69,8 @@ public class TSPSolver {
 
 	public void solve() throws Exception
 	{
-		// localSearchPPV();
-		// DeuxOpt();
+		localSearchPPV();
+		 DeuxOpt();
 		//System.out.println(generateSolutionRandom().isFeasible());
 		GeneticAlgorithm();
 		//Solution sol = generateSolutionRandom();
@@ -90,8 +90,9 @@ public class TSPSolver {
 	 * @version 1 (15/10/2018)
 	 * @throws Exception the exception
 	 */
-	public void localSearchPPV() throws Exception {
-		m_solution.print(System.err);
+	public Solution localSearchPPV() throws Exception {
+		Solution unePetiteSolutionDeDepart = new Solution(m_instance);
+		//m_solution.print(System.err);
 		long t = System.currentTimeMillis();
 		long tempspasse = 0;		
 		boolean[] villes = new boolean[m_instance.getNbCities()];
@@ -111,6 +112,9 @@ public class TSPSolver {
 		} 
 		/* On relie la première ville avec dernière */
 		m_solution.setCityPosition(0,m_instance.getNbCities());
+		unePetiteSolutionDeDepart = m_solution;
+		unePetiteSolutionDeDepart.evaluate();
+		return unePetiteSolutionDeDepart;
 	}
 	
 
@@ -253,16 +257,15 @@ public class TSPSolver {
  */
 	public Solution[] generatePopulation(int taille_pop) throws Exception{
 		Solution[] s = new Solution[taille_pop];
-		//System.out.println("population mère random : ");
-		for(int i=0; i<s.length; i++) {
+		s[0]=localSearchPPV(); //bonne solution au début pour converger plus vite
+		for(int i=1; i<s.length; i++) {
 			s[i]=generateSolutionRandom();
 			/**System.out.println("individu "+i);
 			for(int j=0;j<s.length;j++) {
 				System.out.println(s[i]);
 			}
 			s[i].evaluate();
-			s[i].print(System.err);
-			*/
+			s[i].print(System.out);*/
 		}
 		return s;
 	}
@@ -315,6 +318,7 @@ public class TSPSolver {
 		/**System.out.println("la génération suivante :");
 		for (int i=0; i<nouvelle_pop.length; i++) {
 			System.out.println("individu"+i);
+			nouvelle_pop[i].evaluate();
 			nouvelle_pop[i].print(System.out);
 		}*/
 		return nouvelle_pop;
@@ -334,22 +338,19 @@ public class TSPSolver {
 		Random random = new Random();
 		int nbVilles = m_instance.getNbCities(); 	  		  	 	 						 	
 		boolean[] villesAjoutees = new boolean[nbVilles];
-		System.out.println("les parents");
-		individu_1.print(System.out);
-		individu_2.print(System.out);
 		int start = 1 + random.nextInt((nbVilles/2)-1); //le +1 étant valeur minimale (on ne veut pas changer premier) pareil pour dernier
 		int end = (nbVilles/2) + random.nextInt((nbVilles-1) - (nbVilles/2));
 		Solution enfant = new Solution(m_instance);
-		System.out.println("les indices start et end : "+start+", "+end);
 		enfant.setCityPosition(0,0);
 		enfant.setCityPosition(0, nbVilles);
 		villesAjoutees[0]=true;
+		// on parcout parent 1
 		for(int i=start; i<end; i++) {
 			enfant.setCityPosition(individu_1.getCity(i), i);
 			villesAjoutees[individu_1.getCity(i)]=true;
 			}
-		System.out.println("l'enfant avec gènes individu 1");
-		enfant.print(System.out);
+		
+		
 		// on veut parcourir parent 2
 		for(int i=0; i<start; i++) {
 			if (!villesAjoutees[individu_2.getCity(i)]) {
@@ -363,9 +364,8 @@ public class TSPSolver {
 				villesAjoutees[individu_2.getCity(j)]=true; 	  		  	 	 						 	
 			}  	  		  	 	 						 	
 		}
-		System.out.println("l'enfant pas fini");
-		enfant.print(System.out);
-		// on complète finalement les trous
+		
+		// on complète finalement les trous, s'il y en a
 		
 		for (int k=1; k<nbVilles; k++) {
 			if (enfant.getCity(k)==0) {
@@ -377,8 +377,7 @@ public class TSPSolver {
 				villesAjoutees[ville]=true;
 			}
 		}
-		System.out.println("l'enfant fini "+ enfant.isFeasible());
-		enfant.print(System.out);
+		
 		return enfant;
 		
 	}
@@ -429,22 +428,29 @@ public class TSPSolver {
 	 */
 	public void GeneticAlgorithm() throws Exception {
 		double tauxMutation = 0.015;
-		int tailleTournoi = 5;
+		int tailleTournoi = 6;
 		long t = System.currentTimeMillis();
 		long tempspasse = 0;
+		int compt=0;
 		while(tempspasse<m_timeLimit) {
 			Solution[] populationMere = generatePopulation(100);
-			for(int i=0; i<100; i++) { // correspond au nombre de générations que l'on fait
+			for(int i=0; i<50000; i++) { // correspond au nombre de générations que l'on fait
 				Solution[] populationFille = evolution(populationMere, tailleTournoi, tauxMutation);
+				/**for (int j=0; j<populationMere.length; j++) {
+					System.out.println("l'indivdu "+j+" de la génération "+i+1);
+					populationFille[j].print(System.err);
+				}*/
 				populationMere = populationFille;
+				compt++;
+				
 			}
 			Solution meilleureSolution =getBestFitness(populationMere);
-			System.out.println("la meilleure solution finale");
-			meilleureSolution.print(System.out);
+			//System.out.println("la meilleure solution finale, nb de générations = "+compt);
+			//meilleureSolution.print(System.out);
 			m_solution=meilleureSolution;
-			System.out.println("la solution m_solution");
-			m_solution.evaluate();
-			m_solution.print(System.out);
+			//System.out.println("la solution m_solution");
+			//m_solution.evaluate();
+			//m_solution.print(System.out);
 			tempspasse = System.currentTimeMillis()-t;
 		}
 	}
