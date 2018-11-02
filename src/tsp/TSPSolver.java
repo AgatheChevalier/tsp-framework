@@ -1,6 +1,7 @@
 package tsp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
@@ -323,6 +324,17 @@ public class TSPSolver {
 		for(int i=1; i<nouvelle_pop.length; i++) {
 			Solution parent1 = tournoi(population,tailleTournoi);
 			Solution parent2 = tournoi(population,tailleTournoi);
+			while (parent1==parent2) {
+				parent2=tournoi(population,tailleTournoi);
+			}
+			Solution[] parents = new Solution[2];
+			parents[0]=parent1;
+			parents[1]=parent2;
+			if (getBestFitness(parents)==parent2) {
+				Solution temp= parent1;
+				parent1=parent2;
+				parent2=temp;
+			}
 			Solution enfant = crossover(parent1,parent2);
 			nouvelle_pop[i] = enfant;
 		} 
@@ -348,27 +360,55 @@ public class TSPSolver {
  * @throws Exception the exception
  */	
 	public Solution crossover(Solution individu_1, Solution individu_2) throws Exception {
+		Random random = new Random();
+		int nbVilles = m_instance.getNbCities(); 	  		  	 	 						 	
+		boolean[] villesAjoutees = new boolean[nbVilles];
 		System.out.println("les parents");
-		individu_1.print(System.err);
-		individu_2.print(System.err);
-		int nbVilles = m_instance.getNbCities();
-		int start = ((int)(Math.random()*((nbVilles/2)-1)))+1; //le +1 étant valeur minimale (on ne veut pas changer premier) pareil pour dernier
-		int end = ((int)(Math.random()*((nbVilles-1)-((nbVilles/2)+1))));
+		individu_1.print(System.out);
+		individu_2.print(System.out);
+		int start = 1 + random.nextInt((nbVilles/2)-1); //le +1 étant valeur minimale (on ne veut pas changer premier) pareil pour dernier
+		int end = (nbVilles/2) + random.nextInt((nbVilles-1) - (nbVilles/2));
 		Solution enfant = new Solution(m_instance);
+		System.out.println("les indices start et end : "+start+", "+end);
 		enfant.setCityPosition(0,0);
 		enfant.setCityPosition(0, nbVilles);
+		villesAjoutees[0]=true;
 		for(int i=start; i<end; i++) {
-			enfant.setCityPosition(i, individu_1.getCity(i));
+			enfant.setCityPosition(individu_1.getCity(i), i);
+			villesAjoutees[individu_1.getCity(i)]=true;
 			}
-		for(int i=0; i<nbVilles; i++) {
-			if(enfant.contains(individu_2.getCity(i))!=true) {
-				for(int j=1; j<nbVilles; j++) {
-					enfant.setCityPosition(j, individu_2.getCity(i));
-				}
+		System.out.println("l'enfant avec gènes individu 1");
+		enfant.print(System.out);
+		// on veut parcourir parent 2
+		for(int i=0; i<start; i++) {
+			if (!villesAjoutees[individu_2.getCity(i)]) {
+				enfant.setCityPosition(individu_2.getCity(i), i);
+				villesAjoutees[individu_2.getCity(i)]=true;
 			}
 		}
-		System.out.println("l'enfant");
-		enfant.print(System.err);
+		for(int j=end; j<nbVilles; j++) { 	  		  	 	 						 	
+			if (!villesAjoutees[individu_2.getCity(j)]) { 	  		  	 	 						 	
+				enfant.setCityPosition(individu_2.getCity(j), j); 	  		  	 	 						 	
+				villesAjoutees[individu_2.getCity(j)]=true; 	  		  	 	 						 	
+			}  	  		  	 	 						 	
+		}
+		System.out.println("l'enfant pas fini");
+		enfant.print(System.out);
+		// on complète finalement les trous
+		
+		for (int k=1; k<nbVilles; k++) {
+			if (enfant.getCity(k)==0) {
+				int ville=0;
+				while (villesAjoutees[ville] && ville<villesAjoutees.length) {
+					ville++;
+				}
+				enfant.setCityPosition(ville, k);
+				villesAjoutees[ville]=true;
+			}
+		}
+		System.out.println("l'enfant fini "+ enfant.isFeasible());
+		enfant.print(System.out);
+		
 		return enfant;
 		
 	}
