@@ -265,18 +265,17 @@ public class TSPSolver {
  */
 	public Solution[] generatePopulation(int taille_pop) throws Exception{
 		Solution[] s = new Solution[taille_pop];
-		System.out.println("population mère random : ");
+		//System.out.println("population mère random : ");
 		for(int i=0; i<s.length; i++) {
 			s[i]=generateSolutionRandom();
-			System.out.println("individu "+i);
-			/*for(int j=0;j<s.length;j++) {
+			/**System.out.println("individu "+i);
+			for(int j=0;j<s.length;j++) {
 				System.out.println(s[i]);
-			}*/
+			}
 			s[i].evaluate();
 			s[i].print(System.err);
-			
+			*/
 		}
-			
 		return s;
 	}
 	
@@ -297,15 +296,8 @@ public class TSPSolver {
 				indice = i;
 			}
 		}
-		if (population[indice].isFeasible()) {
-			System.out.println("le meilleur de la population ");
-			population[indice].print(System.err);
-			return population[indice];
-		} else {
-			return population[1];
-		}
-		
-		
+		return population[indice];
+	
 	}
 	
 	/**
@@ -324,28 +316,21 @@ public class TSPSolver {
 		for(int i=1; i<nouvelle_pop.length; i++) {
 			Solution parent1 = tournoi(population,tailleTournoi);
 			Solution parent2 = tournoi(population,tailleTournoi);
-			while (parent1==parent2) {
+			while (parent1==parent2) { // pour ne jamais avoir les mêmes parents
 				parent2=tournoi(population,tailleTournoi);
 			}
-			Solution[] parents = new Solution[2];
-			parents[0]=parent1;
-			parents[1]=parent2;
-			if (getBestFitness(parents)==parent2) {
-				Solution temp= parent1;
-				parent1=parent2;
-				parent2=temp;
-			}
 			Solution enfant = crossover(parent1,parent2);
-			nouvelle_pop[i] = enfant;
+			nouvelle_pop[i] = enfant;	
+			
 		} 
 		for(int i=0; i<nouvelle_pop.length; i++) {
 			muter(nouvelle_pop[i], tauxMutation);
 		}
-		System.out.println("la génération suivante :");
+		/**System.out.println("la génération suivante :");
 		for (int i=0; i<nouvelle_pop.length; i++) {
 			System.out.println("individu"+i);
-			nouvelle_pop[i].print(System.err);
-		}
+			nouvelle_pop[i].print(System.out);
+		}*/
 		return nouvelle_pop;
 	}
 	
@@ -408,7 +393,6 @@ public class TSPSolver {
 		}
 		System.out.println("l'enfant fini "+ enfant.isFeasible());
 		enfant.print(System.out);
-		
 		return enfant;
 		
 	}
@@ -445,19 +429,11 @@ public class TSPSolver {
  */ 
 	public Solution tournoi(Solution[] population, int tailleTournoi) throws Exception {
 		Solution[] tournoi = new Solution[tailleTournoi];
-		System.out.println("la population juste avant le tournoi");
-		for (int i=0; i<population.length; i++) {
-			population[i].print(System.err);
-		}
 		for(int i=0; i< tailleTournoi; i++) {
 			int random = (int)(Math.random()*population.length);
 			tournoi[i] = population[random];
-			System.out.println("l'indivdu "+i+" dans le tournoi de taille "+tailleTournoi);
-			tournoi[i].print(System.err);
 		}
 		Solution fittest = getBestFitness(tournoi);
-		System.out.println("le vainqueur du tournoi : ");
-		fittest.print(System.err);
 		return fittest;
 	}
 	
@@ -475,17 +451,18 @@ public class TSPSolver {
 La sélection par tournoi fait affronter plusieurs individus sélectionnés au hasard. Ici ce sont donc des tournois de 5 circuits et on garde le circuit avec la distance la plus faible. */
 		int tailleTournoi = 5;
 		
-		Solution[] populationMere = generatePopulation(10);
-		for(int i=0; i<1; i++) {
+		Solution[] populationMere = generatePopulation(100);
+		for(int i=0; i<100; i++) { // correspond au nombre de générations que l'on fait
 			Solution[] populationFille = evolution(populationMere, tailleTournoi, tauxMutation);
 			populationMere = populationFille;
 		}
 		Solution meilleureSolution =getBestFitness(populationMere);
-		for (int i=1; i<m_instance.getNbCities()-1; i++) {
-			m_solution.setCityPosition(i, meilleureSolution.getCity(i));
-		} 
-		m_solution.setCityPosition(0, 0);
-		m_solution.setCityPosition(0, m_instance.getNbCities()); 
+		System.out.println("la meilleure solution finale");
+		meilleureSolution.print(System.out);
+		m_solution=meilleureSolution;
+		System.out.println("la solution m_solution");
+		m_solution.evaluate();
+		m_solution.print(System.out);
 		
 	}
 
