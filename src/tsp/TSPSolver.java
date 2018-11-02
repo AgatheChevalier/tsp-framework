@@ -69,6 +69,8 @@ public class TSPSolver {
 
 	public void solve() throws Exception
 	{
+		// localSearchPPV();
+		// DeuxOpt();
 		//System.out.println(generateSolutionRandom().isFeasible());
 		GeneticAlgorithm();
 		//Solution sol = generateSolutionRandom();
@@ -98,17 +100,17 @@ public class TSPSolver {
 		m_solution.setCityPosition(ville_courante, 0);
 		int compteur=1;
 		/* Tant que l'on a pas traité le cas de chaque ville on continue à chercher les plus proches voisins */
-		while(compteur<m_instance.getNbCities()) {
+		while(compteur<m_instance.getNbCities() && tempspasse<m_timeLimit) {
 			int ville_proche = plusProcheVoisin(ville_courante,villes);
 			villes[ville_proche]=true;
 			m_solution.setCityPosition(ville_proche, compteur);
 			ville_courante=ville_proche;
 			compteur++;
+			/* On teste le temps depuis lequel le programme tourne */
+			tempspasse=System.currentTimeMillis()-t;
 		} 
 		/* On relie la première ville avec dernière */
 		m_solution.setCityPosition(0,m_instance.getNbCities());
-		/* On teste le temps depuis lequel le programme tourne */
-		tempspasse=System.currentTimeMillis()-t;
 	}
 	
 
@@ -171,56 +173,44 @@ public class TSPSolver {
 		m_solution.print(System.err);
 		long t = System.currentTimeMillis();
 		long tempspasse = 0;
-		while(tempspasse<m_timeLimit) {
 		int size = m_instance.getNbCities();   
-		    // On répète jusqu'à qu'il n'y ait plus d'amélioration
-		    int amelioration = 0;
-		    while ( amelioration < 100 )
-		    {
+		int amelioration = 0;
+		while ( amelioration<100 && tempspasse<m_timeLimit) {
 		        double meilleure_distance = m_solution.getCout();   
-		        for ( int i = 1; i < size - 1; i++ ) 
-		        {
-		            for ( int k = i + 1; k < size; k++) 
-		            {
+		        for ( int i = 1; i < size - 1; i++ ) {
+		            for ( int k = i + 1; k < size; k++) {
 		            	Solution newm_solution=m_solution.copy();
 		                swap( i, k, newm_solution );		               
 		                double nouvelle_distance = newm_solution.getCout();		 
-		                if ( nouvelle_distance < meilleure_distance ) 
-		                {
+		                if ( nouvelle_distance < meilleure_distance ) {
 		                	// on a amélioré le trajet donc on remet la variable à 0
 		                    amelioration = 0;		                                                 
-		                    for (int j=0;j<size;j++)
-		                    {
+		                    for (int j=0;j<size;j++) {
 		                        m_solution.setCityPosition(newm_solution.getCity(j), j);
 		                    }		                         
 		                    meilleure_distance = nouvelle_distance;	                   
-			                }		         
-		            }
+		                }		         
+		           }
 		        }		 
 		        amelioration ++;
 		        tempspasse = System.currentTimeMillis()-t;
-		    }
-		}
-		 
+		}	 
 	}
 	
 	public void swap( int i, int k, Solution newm_solution ) throws Exception {
 	    int size = m_instance.getNbCities();
 	    // 1. On recopie jusqu'à l'index i (index de la première ville qu'on veut inverser)
-	    for ( int c = 0; c < i; ++c )
-	    {
+	    for ( int c = 0; c < i; ++c ) {
 	        newm_solution.setCityPosition( m_solution.getCity( c ),c );
 	    } 
 	    // 2. On inverse l'ordre entre les villes d'index i et k
 	    int dec = 0;
-	    for ( int c = i; c < k+1; ++c )
-	    {
+	    for ( int c = i; c < k+1; ++c ) {
 	        newm_solution.setCityPosition(  m_solution.getCity( k - dec ),c );
 	        dec++;
 	    }
 	    // 3. On rajoute les dernières villes après l'index k
-	    for ( int c = k + 1; c < size; ++c )
-	    {
+	    for ( int c = k + 1; c < size; ++c ) {
 	        m_solution.setCityPosition( m_solution.getCity( c ),c );
 	    }
 	}
@@ -231,7 +221,6 @@ public class TSPSolver {
 	
 /**
 	 *  Cette méthode génère un chemin au hasard sur l'instance choisie.
-	 *
 	 * @version 2 (22/10/2018)
 	 * @return Une solution au problème sur l'instance choisie
 	 * @throws Exception the exception
@@ -257,9 +246,8 @@ public class TSPSolver {
 	
 /**
  *  Cette méthode génère une population de chemins sur l'instance choisie.
- *
  * @version 1 (19/10/18)
- * @param taille_pop  La taille de population que l'on choisie
+ * @param taille_pop  La taille de population que l'on choisit
  * @return Un tableau de solutions random de taille que l'on a choisie
  * @throws Exception
  */
@@ -281,7 +269,6 @@ public class TSPSolver {
 	
 /**
  *  Cette méthode permet de trouver le chemin avec le coût minimum dans une population .
- *
  * @version 1 (21/10/2018)
  * @param population Un tableau de solutions au problème
  * @return L'indice dans le tableau entré en paramètre de la ville ayant le coût minimum
@@ -297,7 +284,6 @@ public class TSPSolver {
 			}
 		}
 		return population[indice];
-	
 	}
 	
 	/**
@@ -398,11 +384,11 @@ public class TSPSolver {
 	}
 	
 	/**
-	 * Muter.
-	 *
-	 * @param circuit the circuit
-	 * @param tauxMutation the taux mutation
-	 * @throws Exception the exception
+	 * Cette méthode est celle qui définit la mutation d'un circuit: si le random tiré est plus petit que tauxMutation 
+	 * alors on échange deux villes à des indices random.
+	 * @param circuit L'individu à faire muter (ou non)
+	 * @param tauxMutation La probabilité de muter
+	 * @throws Exception
 	 */
 	public void muter(Solution circuit, double tauxMutation) throws Exception {
 		int nbVilles = m_instance.getNbCities();
@@ -421,11 +407,10 @@ public class TSPSolver {
 /**
  *  Etape 3:
  * Cette méthode retourne le meilleur circuit du tournoi.
- * @version 1 (21/10/2018)
  * @param population Notre population où effectuer le tournoi
  * @param tailleTournoi Le nombre de participants au tournoi
  * @return fittest Le meilleur circuit du tournoi
- * @throws Exception the exception
+ * @throws Exception
  */ 
 	public Solution tournoi(Solution[] population, int tailleTournoi) throws Exception {
 		Solution[] tournoi = new Solution[tailleTournoi];
@@ -438,32 +423,30 @@ public class TSPSolver {
 	}
 	
 	/**
-	 * Genetic algorithm.
-	 *
-	 * @throws Exception the exception
+	 * La méthode principale qui va réaliser un certain nombre de générations en appelant les différentes méthodes
+	 * détaillées plus haut.
+	 * @throws Exception
 	 */
 	public void GeneticAlgorithm() throws Exception {
-/* Probabilité qu'une ville d'un circuit subisse une mutation. 
- * Cela correspond à l'inversion de la position de deux villes dans le circuit. 
- * Le taux est assez faible car la probabilité d'obtenir une distance plus faible en inversant deux ville est peu élevée */		
 		double tauxMutation = 0.015;
-/* Taille des poules de notre tournoi (l'une des méthodes possibles pour sélectionner les individus que nous souhaitons faire se reproduire).
-La sélection par tournoi fait affronter plusieurs individus sélectionnés au hasard. Ici ce sont donc des tournois de 5 circuits et on garde le circuit avec la distance la plus faible. */
 		int tailleTournoi = 5;
-		
-		Solution[] populationMere = generatePopulation(100);
-		for(int i=0; i<100; i++) { // correspond au nombre de générations que l'on fait
-			Solution[] populationFille = evolution(populationMere, tailleTournoi, tauxMutation);
-			populationMere = populationFille;
+		long t = System.currentTimeMillis();
+		long tempspasse = 0;
+		while(tempspasse<m_timeLimit) {
+			Solution[] populationMere = generatePopulation(100);
+			for(int i=0; i<100; i++) { // correspond au nombre de générations que l'on fait
+				Solution[] populationFille = evolution(populationMere, tailleTournoi, tauxMutation);
+				populationMere = populationFille;
+			}
+			Solution meilleureSolution =getBestFitness(populationMere);
+			System.out.println("la meilleure solution finale");
+			meilleureSolution.print(System.out);
+			m_solution=meilleureSolution;
+			System.out.println("la solution m_solution");
+			m_solution.evaluate();
+			m_solution.print(System.out);
+			tempspasse = System.currentTimeMillis()-t;
 		}
-		Solution meilleureSolution =getBestFitness(populationMere);
-		System.out.println("la meilleure solution finale");
-		meilleureSolution.print(System.out);
-		m_solution=meilleureSolution;
-		System.out.println("la solution m_solution");
-		m_solution.evaluate();
-		m_solution.print(System.out);
-		
 	}
 
 	// -----------------------------
