@@ -450,7 +450,7 @@ public class TSPSolver {
 		int compt=0;
 		while(tempspasse<m_timeLimit) {
 			Solution[] populationMere = generatePopulation(100);
-			for(int i=0; i<50000; i++) { // correspond au nombre de générations que l'on fait
+			for(int i=0; i<5000; i++) { // correspond au nombre de générations que l'on fait
 				Solution[] populationFille = evolution(populationMere, tailleTournoi, tauxMutation);
 				/**for (int j=0; j<populationMere.length; j++) {
 					System.out.println("l'indivdu "+j+" de la génération "+i+1);
