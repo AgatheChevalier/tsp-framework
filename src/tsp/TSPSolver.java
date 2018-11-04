@@ -69,10 +69,10 @@ public class TSPSolver {
 
 	public void solve() throws Exception
 	{
-		localSearchPPV();
-		DeuxOpt();
+		//localSearchPPV();
+		//DeuxOpt();
 		//System.out.println(generateSolutionRandom().isFeasible());
-		//GeneticAlgorithm();
+		GeneticAlgorithm();
 		//Solution sol = generateSolutionRandom();
 		//for (int i=0; i<m_instance.getNbCities(); i++) {
 		//	System.out.println(sol.contains(i));
@@ -87,8 +87,7 @@ public class TSPSolver {
 	 *  Première méthode que nous avons développée: un Local Search qui cherche de ville en ville la plus proche voisine.
 	 * Appelle la méthode plusProcheVoisin(int ville_courante, boolean[] villes).
 	 *
-	 * @version 1 (15/10/2018)
-	 * @throws Exception the exception
+	 * @throws Exception
 	 */
 	public Solution localSearchPPV() throws Exception {
 		Solution unePetiteSolutionDeDepart = new Solution(m_instance);
@@ -121,12 +120,11 @@ public class TSPSolver {
 	/**
 	 *  Cette méthode cherche le Plus Proche Voisin non visité de ville_courante contenu dans tableau_villes.
 	 *
-	 * @version 1 (15/10/2018)
 	 * @param ville_courante Un entier correspondant à l'indice de la ville dont on cherche le PPV.
 	 * @param tableau_villes Un tableau de booléens de longueur m_instance.getNbCities().
 	 * Si la ville i a déjà été visitée, ville[i]=true. Sinon, ville[i]=false.
 	 * @return Un entier correspondant à l'indice de la ville la plus proche de ville_courante non visitée.
-	 * @throws Exception the exception
+	 * @throws Exception
 	 */
 	public int plusProcheVoisin(int ville_courante, boolean[] tableau_villes) throws Exception {
 		int index = ville_courante;
@@ -155,9 +153,8 @@ public class TSPSolver {
 	/**
 	 *  Cette méthode calcule le coût d'un trajet en appelant la méthode getTour() de la classe Solution. 
 	 *
-	 * @version 1 (16/10/2018)
-	 * @return the cout
-	 * @throws Exception the exception
+	 * @return Le coût de la solution concernée par l'appel de la méthode
+	 * @throws Exception
 	 */
 	public int getCout() throws Exception {
 		m_solution.print(System.err);
@@ -173,6 +170,12 @@ public class TSPSolver {
 	// ----- ALGORITHME 2-OPT ------
 	// -----------------------------
 	
+	/**
+	 *  La méthode principale qui déroule l'algorithme 2-opt; codée pour améliorer les résultats du PPV.
+	 * Appelle la méthode swap(int i, int k, Solution newm_solution). 
+	 *
+	 * @throws Exception
+	 */
 	public void DeuxOpt() throws Exception {
 		m_solution.print(System.err);
 		long t = System.currentTimeMillis();
@@ -200,8 +203,17 @@ public class TSPSolver {
 		        tempspasse = System.currentTimeMillis()-t;
 		}	 
 	}
-	
-	public void swap( int i, int k, Solution newm_solution ) throws Exception {
+
+	/**
+	 * Méthode qui échange deux villes dans une solution selon le schéma que l'on a choisi. 
+	 * Ici, on va non seulement échanger les villes i et k mais aussi inverser l'ordre des villes entre les deux indices.
+	 * 
+	 * @param i L'indice de la première ville
+	 * @param k L'indice de la seconde ville
+	 * @param newm_solution La nouvelle solution que l'on va remplir
+	 * @throws Exception
+	 */
+	public void swap(int i, int k, Solution newm_solution) throws Exception {
 	    int size = m_instance.getNbCities();
 	    // 1. On recopie jusqu'à l'index i (index de la première ville qu'on veut inverser)
 	    for ( int c = 0; c < i; ++c ) {
@@ -223,11 +235,11 @@ public class TSPSolver {
 	// --- ALGORITHME GENETIQUE ----
 	// -----------------------------	
 	
-/**
+	/**
 	 *  Cette méthode génère un chemin au hasard sur l'instance choisie.
-	 * @version 2 (22/10/2018)
+	 *  
 	 * @return Une solution au problème sur l'instance choisie
-	 * @throws Exception the exception
+	 * @throws Exception
 	 */
 	public Solution generateSolutionRandom() throws Exception {		
 		ArrayList<Integer> temp = new ArrayList<Integer>();
@@ -248,13 +260,13 @@ public class TSPSolver {
 		return m_sol;
 	}
 	
-/**
- *  Cette méthode génère une population de chemins sur l'instance choisie.
- * @version 1 (19/10/18)
- * @param taille_pop  La taille de population que l'on choisit
- * @return Un tableau de solutions random de taille que l'on a choisie
- * @throws Exception
- */
+	/**
+	 *  Cette méthode génère une population de chemins sur l'instance choisie.
+	 *  
+	 * @param taille_pop  La taille de population que l'on choisi
+	 * @return Un tableau de solutions random ie une population random de taille que l'on a choisie
+	 * @throws Exception
+	 */
 	public Solution[] generatePopulation(int taille_pop) throws Exception{
 		Solution[] s = new Solution[taille_pop];
 		s[0]=localSearchPPV(); //bonne solution au début pour converger plus vite
@@ -270,13 +282,13 @@ public class TSPSolver {
 		return s;
 	}
 	
-/**
- *  Cette méthode permet de trouver le chemin avec le coût minimum dans une population .
- * @version 1 (21/10/2018)
- * @param population Un tableau de solutions au problème
- * @return L'indice dans le tableau entré en paramètre de la ville ayant le coût minimum
- * @throws Exception the exception
- */
+	/**
+	 *  Cette méthode permet de trouver le chemin avec le coût minimum (ici appelé "fitness") dans une population donnée.
+	 *
+	 * @param population Un tableau de solutions au problème ie une population
+	 * @return L'indice dans le tableau entré en paramètre de la ville ayant le coût minimum
+	 * @throws Exception
+	 */
 	public Solution getBestFitness(Solution[] population) throws Exception {
 		double minimum = population[0].getCout();
 		int indice = 0;
@@ -290,14 +302,17 @@ public class TSPSolver {
 	}
 	
 	/**
-	 * Evolution.
+	 * Méthode qui permet de faire évoluer une population selon le schéma que l'on a choisi:
+	 * 1) Enregistrement du meilleur individu || 
+	 * 2) Remplissage de la nouvelle population par des individus "enfants" en réalisant des tournois entre les individus "parents".
+	 * POur cela on fait appel aux méthodes tournoi(Solution[] population, int tailleTournoi) et crossover(Solution individu_1, Solution individu_2) ||
+	 * 3) Mutation de la nouvelle population en faisant appel à muter(Solution circuit, double tauxMutation)
 	 *
-	 * @param population the population
-	 * @param taillepop the taillepop
-	 * @param tailleTournoi the taille tournoi
-	 * @param tauxMutation the taux mutation
-	 * @return the solution[]
-	 * @throws Exception the exception
+	 * @param population La population de départ ie la population mère
+	 * @param tailleTournoi La taille des tournois que l'on réalise à l'étape 2
+	 * @param tauxMutation Le taux de mutation choisi pour l'étape 3
+	 * @return Un tableau de solutions qui est la population d'arrivée ie la population enfant
+	 * @throws Exception
 	 */
 	public Solution[] evolution(Solution[] population, int tailleTournoi, double tauxMutation) throws Exception {
 		Solution[] nouvelle_pop = new Solution[population.length];
@@ -324,16 +339,14 @@ public class TSPSolver {
 		return nouvelle_pop;
 	}
 	
-/**
- *  Etape 2: 
- * Cette méthode retourne l'enfant de deux individus que l'on a choisi de reproduire .
- *
- * @version 1 (21/10/2018)
- * @param individu_1 the individu 1
- * @param individu_2 the individu 2
- * @return the solution
- * @throws Exception the exception
- */	
+	/**
+	 * Cette méthode retourne l'enfant de deux individus que l'on a choisi de reproduire/croiser selon le schéma de croisement que l'on a choisi.
+	 *
+	 * @param individu_1 La solution "parent" n°1
+	 * @param individu_2 La solution "parent" n°2
+	 * @return Une solution "enfant" issue du croisement des 2 solutions "parent"
+	 * @throws Exception the exception
+	 */	
 	public Solution crossover(Solution individu_1, Solution individu_2) throws Exception {
 		Random random = new Random();
 		int nbVilles = m_instance.getNbCities(); 	  		  	 	 						 	
@@ -344,12 +357,12 @@ public class TSPSolver {
 		enfant.setCityPosition(0,0);
 		enfant.setCityPosition(0, nbVilles);
 		villesAjoutees[0]=true;
+		
 		// on parcout parent 1
 		for(int i=start; i<end; i++) {
 			enfant.setCityPosition(individu_1.getCity(i), i);
 			villesAjoutees[individu_1.getCity(i)]=true;
 			}
-		
 		
 		// on veut parcourir parent 2
 		for(int i=0; i<start; i++) {
@@ -366,7 +379,6 @@ public class TSPSolver {
 		}
 		
 		// on complète finalement les trous, s'il y en a
-		
 		for (int k=1; k<nbVilles; k++) {
 			if (enfant.getCity(k)==0) {
 				int ville=0;
@@ -377,14 +389,12 @@ public class TSPSolver {
 				villesAjoutees[ville]=true;
 			}
 		}
-		
-		return enfant;
-		
+		return enfant;		
 	}
 	
 	/**
-	 * Cette méthode est celle qui définit la mutation d'un circuit: si le random tiré est plus petit que tauxMutation 
-	 * alors on échange deux villes à des indices random.
+	 * Cette méthode fait muter un circuit selon le schéma que l'on a choisi.
+	 * Si le random tiré est plus petit que tauxMutation alors on échange deux villes à des indices random.
 	 * @param circuit L'individu à faire muter (ou non)
 	 * @param tauxMutation La probabilité de muter
 	 * @throws Exception
@@ -403,14 +413,15 @@ public class TSPSolver {
 		}
 	} 
 	
-/**
- *  Etape 3:
- * Cette méthode retourne le meilleur circuit du tournoi.
- * @param population Notre population où effectuer le tournoi
- * @param tailleTournoi Le nombre de participants au tournoi
- * @return fittest Le meilleur circuit du tournoi
- * @throws Exception
- */ 
+
+	/**
+	 * Cette méthode réalise un tournoi de taille choisie selon le schéma de tournoi que l'on a choisi. 
+	 * 
+	 * @param population La population où effectuer le tournoi
+	 * @param tailleTournoi Le nombre d'individus participant au tournoi
+	 * @return Le circuit avec la meilleure "fitness" ie coût du tournoi
+	 * @throws Exception
+	 */ 
 	public Solution tournoi(Solution[] population, int tailleTournoi) throws Exception {
 		Solution[] tournoi = new Solution[tailleTournoi];
 		for(int i=0; i< tailleTournoi; i++) {
@@ -422,8 +433,13 @@ public class TSPSolver {
 	}
 	
 	/**
-	 * La méthode principale qui va réaliser un certain nombre de générations en appelant les différentes méthodes
-	 * détaillées plus haut.
+	 * Méthode principale qui va dérouler l'algorithme génétique sur un certain nombre de générations.
+	 * Appelle les méthodes generatePopulation(int taille_pop),
+	 * evolution(Solution[] population, int tailleTournoi, double tauxMutation)
+	 * et getBestFitness(Solution[] population).
+	 * C'est dans cette méthode que l'on choisi tauxMutation, tailleTournoi, taille_pop et le nombre de générations.
+	 * On teste également le respect de la limite de temps. 
+	 *
 	 * @throws Exception
 	 */
 	public void GeneticAlgorithm() throws Exception {
