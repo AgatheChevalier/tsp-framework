@@ -91,11 +91,8 @@ public class Fourmi {
 		int i = 0;
 		long d_tot = 0;
 		while (i<this.memoire.length) {
-			d_tot += d_tot + distance(memoire[i], memoire[i+1]);
+			d_tot += distance(memoire[i], memoire[i+1]);
 			i++;
-		}
-		if (i==this.memoire.length) {
-			d_tot += d_tot + distance(memoire[i], memoire[0]);
 		}
 		return d_tot;
 	}
