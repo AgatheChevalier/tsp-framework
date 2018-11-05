@@ -29,7 +29,7 @@ public class Pheromones {
 		double[][] deltaTau = this.depotPheromones();
 		for (int i=0; i<this.tau.length; i++) {
 			for(int j=0; j<this.tau[i].length; i++) {
-				this.tau[i][j]=rho*tau[i][j]+deltaTau[i][j];
+				this.tau[i][j]=(1-rho)*tau[i][j]+deltaTau[i][j];
 			}
 		}
 		return this.tau;

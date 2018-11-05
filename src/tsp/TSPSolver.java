@@ -72,7 +72,7 @@ public class TSPSolver {
 		//localSearchPPV();
 		//DeuxOpt();
 		//System.out.println(generateSolutionRandom().isFeasible());
-		GeneticAlgorithm();
+		//GeneticAlgorithm();
 		//Solution sol = generateSolutionRandom();
 		//for (int i=0; i<m_instance.getNbCities(); i++) {
 		//	System.out.println(sol.contains(i));

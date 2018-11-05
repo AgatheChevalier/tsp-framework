@@ -2,11 +2,6 @@ package tsp;
 
 public class Fourmi {
 	
-	/*private int pos_depart;		
-	private double[][] qte_pheromone;	
-	//quantite de pheromones laissee par la fourmi sur chaque arc
-	
-	*/
 	private int[] memoire ;		//liste  memoire associee a  une fourmi
 	private int[] villesAVisiter ; 	//liste des villes a  visiter a  l'instant t
 	private Instance m_instance;
@@ -45,7 +40,7 @@ public class Fourmi {
 			// s'il reste des villes a visiter :
 			// on constrit la somme des produits tau*eta pour l'ensemble des villes restantes (i.e. produit de (qte de pheromones)*(visibilite) pour l'arc (i,l)) :
 			double tau_eta = 0;
-			for (int l : villesAVisiter) {
+			for (int l : this.villesAVisiter) {
 				tau_eta += Math.pow(tau[i][l], alpha)*Math.pow(visibilite(i, l), beta);
 			}
 			// on applique la formule de la probabilitÃ© du choix de la ville j :
@@ -55,38 +50,39 @@ public class Fourmi {
 	}
 	
 	public int villeSuivante(int villeDeDepart) throws Exception { // la fourmi choisit la ville de probabilite la plus elevee :
-		int size = memoire.length;
+		int size = this.memoire.length;
 		if (this.villesAVisiter.length >= 1) { //si elle n'a pas encore visite toutes les villes :
 			int[] copieMemoire = new int[size+1];	// on cherche a  mettre a  jour la memoire de la fourmi : on va ajouter une case pour y entrer la ville suivante
 			for (int m=0; m<size; m++) {
-				copieMemoire[m] = memoire[m];
+				copieMemoire[m] = this.memoire[m];
 			}
 			if ( this.villesAVisiter.length == 1) {	//1er cas : s'il ne reste a  la fourmi qu'a  revenir a  la ville de depart :
-				memoire[size]=0;
+				copieMemoire[size]=0;
 			} else if ( this.villesAVisiter.length > 1 ) { //s'il reste plus qu'une ville a  visiter : 
 					double p=0;	
 					int index=0;
 					//on va comparer les probabilites
-					for (int l : villesAVisiter) {
-						if (probabilite(villeDeDepart,l)>p) {
-							p=probabilite(villeDeDepart,l);
-							index=l;
-						} else if (probabilite(villeDeDepart,l)==p) { 
-							// cas ou deux villes possedent une meme probabilite©, on choisit celle ou la quantite de pheromones est la plus grande
+					for (int v : this.villesAVisiter) {
+						if (probabilite(villeDeDepart,v)>p) {
+							p=probabilite(villeDeDepart,v);
+							index=v;
+						} else if (probabilite(villeDeDepart,v)==p) { 
+							// cas ou deux villes possedent une meme probabilite, on choisit celle ou la quantite de pheromones est la plus grande
 							
 						}
 					}
-					memoire[size]=index;
+					copieMemoire[size]=index;
 			}
+			this.memoire=copieMemoire;
 		}
-		return memoire[size];	//on retourne la ville suivante et la liste "memoire" est actualisee
+		return this.memoire[size];	//on retourne la ville suivante et la liste "memoire" est actualisee
 	}
 	
 	public double distance_totale (int position_init) throws Exception {
 		int i = 0;
 		double d_tot = 0;
 		while (i<this.memoire.length) {
-			d_tot += distance(memoire[i], memoire[i+1]);
+			d_tot += distance(this.memoire[i], this.memoire[i+1]);
 			i++;
 		}
 		return d_tot;
