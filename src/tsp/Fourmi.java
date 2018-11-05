@@ -1,7 +1,7 @@
 package tsp;
 
 public class Fourmi {
-	
+	  
 	private int[] memoire ;		//liste  memoire associee à une fourmi
 	private int[] villesAVisiter ; 	//liste des villes à visiter à l'instant t
 	private Instance m_instance;
@@ -16,8 +16,8 @@ public class Fourmi {
 	/**
 	 * Constructeur pour créer une fourmi
 	 * 
-	 * @param memoire L
-	 * @param aVisiter
+	 * @param memoire La mémoire de la fourmi construire
+	 * @param aVisiter Les villes que la fourmi va devoir visiter à l'instant t
 	 */
 	public Fourmi(int[] memoire, int[] aVisiter) { //constructeur
 		super();
@@ -25,14 +25,38 @@ public class Fourmi {
 		this.villesAVisiter = aVisiter;
 	}
 	
+	/**
+	 * Retourne la distance entre deux villes.
+	 * 
+	 * @param i L'indice de la première ville
+	 * @param j L'indice de la seconde ville
+	 * @return Retourne la distance entre les deux villes i et j
+	 * @throws Exception
+	 */
 	public double distance (int i, int j) throws Exception {	//distance entre 2 villes i et j
 		return  m_instance.getDistances(i, j);
 	}
 	
+	/**
+	 * Retourne la visibilié entre deux villes.
+	 * 
+	 * @param i L'indice de la première ville
+	 * @param j L'indice de la seconde ville
+	 * @return Retourne la visibilié (ie l'inverse de la distance) entre les deux villes i et j
+	 * @throws Exception
+	 */
 	public double visibilite (int i, int j) throws Exception {	//visibilite entre 2 villes i et j
 		return 1/distance(i, j);
 	}
 	
+	/**
+	 * Retourne la probabilité de choisir la ville j en partant de la ville i.
+	 * 
+	 * @param i L'indice de la première ville
+	 * @param j L'indice de la seconde ville
+	 * @return La problabilité de visiter j après i
+	 * @throws Exception
+	 */
 	public double probabilite(int i, int j) throws Exception { //probabilite de choisir la ville j en partant de la ville i : 
 		double p = 0;
 		if ( this.villesAVisiter.length == 1) {
@@ -55,6 +79,13 @@ public class Fourmi {
 		return p;
 	}
 	
+	/**
+	 * Méthode qui choisit la prochaine ville que la fourmi va visiter.
+	 * 
+	 * @param villeDeDepart La ville dont part la fourmi
+	 * @return L'indice de la ville qui sera la prochaine à visiter
+	 * @throws Exception
+	 */
 	public int villeSuivante(int villeDeDepart) throws Exception { // la fourmi choisit la ville de probabilite la plus elevee :
 		int size = this.memoire.length;
 		if (this.villesAVisiter.length >= 1) { //si elle n'a pas encore visite toutes les villes :
@@ -84,6 +115,13 @@ public class Fourmi {
 		return this.memoire[size];	//on retourne la ville suivante et la liste "memoire" est actualisee
 	}
 	
+	/**
+	 * Retourne la distance totale d'un trajet. 
+	 * 	
+	 * @param position_init La première position de laquelle on part
+	 * @return La distance totale du trajet effectué
+	 * @throws Exception
+	 */
 	public double distance_totale (int position_init) throws Exception {
 		int i = 0;
 		double d_tot = 0;
