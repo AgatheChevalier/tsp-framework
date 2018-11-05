@@ -70,7 +70,36 @@ public class TSPSolver {
 	public void solve() throws Exception
 	{
 		localSearchPPV();
-		//DeuxOpt();
+		/**DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();/*
+		/*double anciencout=m_solution.evaluate();
+		DeuxOpt();
+		while(m_solution.evaluate()<anciencout) {
+			anciencout=m_solution.evaluate();
+			DeuxOpt();
+		}
+
+		Solution newm_solution=m_solution.copy();
+		int nbVilles=m_instance.getNbCities();
+		Random random=new Random();
+		int start = 1 + random.nextInt((nbVilles/2)-1); 
+		int end = (nbVilles/2) + random.nextInt((nbVilles-1) - (nbVilles/2));
+		swap(start,end,newm_solution);
+		m_solution=newm_solution;
+		DeuxOpt();
+		DeuxOpt();		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
+*/
 		//System.out.println(generateSolutionRandom().isFeasible());
 		GeneticAlgorithm();
 		//Solution sol = generateSolutionRandom();
@@ -203,6 +232,10 @@ public class TSPSolver {
 		        tempspasse = System.currentTimeMillis()-t;
 		}	 
 	}
+	
+
+		
+	
 
 	/**
 	 * Méthode qui échange deux villes dans une solution selon le schéma que l'on a choisi. 
@@ -317,6 +350,8 @@ public class TSPSolver {
 	public Solution[] evolution(Solution[] population, int tailleTournoi, double tauxMutation) throws Exception {
 		Solution[] nouvelle_pop = new Solution[population.length];
 		nouvelle_pop[0] = getBestFitness(population); // On enregistre le meilleur circuit de notre ancienne population
+		System.out.println("meilleur de la pop");
+		nouvelle_pop[0].print(System.out);
 		for(int i=1; i<nouvelle_pop.length; i++) {
 			Solution parent1 = tournoi(population,tailleTournoi);
 			Solution parent2 = tournoi(population,tailleTournoi);
@@ -327,15 +362,15 @@ public class TSPSolver {
 			nouvelle_pop[i] = enfant;	
 			
 		} 
-		for(int i=0; i<nouvelle_pop.length; i++) {
+		for(int i=1; i<nouvelle_pop.length; i++) {
 			muter(nouvelle_pop[i], tauxMutation);
 		}
-		/**System.out.println("la génération suivante :");
+		System.out.println("la génération suivante :");
 		for (int i=0; i<nouvelle_pop.length; i++) {
 			System.out.println("individu"+i);
 			nouvelle_pop[i].evaluate();
 			nouvelle_pop[i].print(System.out);
-		}*/
+		}
 		return nouvelle_pop;
 	}
 	
@@ -449,8 +484,8 @@ public class TSPSolver {
 		long tempspasse = 0;
 		int compt=0;
 		while(tempspasse<m_timeLimit) {
-			Solution[] populationMere = generatePopulation(1500);
-			for(int i=0; i<5000; i++) { // correspond au nombre de générations que l'on fait
+			Solution[] populationMere = generatePopulation(10);
+			for(int i=0; i<10; i++) { // correspond au nombre de générations que l'on fait
 				Solution[] populationFille = evolution(populationMere, tailleTournoi, tauxMutation);
 				populationMere = populationFille;
 				compt++;
