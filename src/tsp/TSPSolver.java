@@ -69,10 +69,10 @@ public class TSPSolver {
 
 	public void solve() throws Exception
 	{
-		//localSearchPPV();
+		localSearchPPV();
 		//DeuxOpt();
 		//System.out.println(generateSolutionRandom().isFeasible());
-		//GeneticAlgorithm();
+		GeneticAlgorithm();
 		//Solution sol = generateSolutionRandom();
 		//for (int i=0; i<m_instance.getNbCities(); i++) {
 		//	System.out.println(sol.contains(i));
@@ -449,24 +449,15 @@ public class TSPSolver {
 		long tempspasse = 0;
 		int compt=0;
 		while(tempspasse<m_timeLimit) {
-			Solution[] populationMere = generatePopulation(100);
+			Solution[] populationMere = generatePopulation(1500);
 			for(int i=0; i<5000; i++) { // correspond au nombre de générations que l'on fait
 				Solution[] populationFille = evolution(populationMere, tailleTournoi, tauxMutation);
-				/**for (int j=0; j<populationMere.length; j++) {
-					System.out.println("l'indivdu "+j+" de la génération "+i+1);
-					populationFille[j].print(System.err);
-				}*/
 				populationMere = populationFille;
 				compt++;
 				
 			}
 			Solution meilleureSolution =getBestFitness(populationMere);
-			//System.out.println("la meilleure solution finale, nb de générations = "+compt);
-			//meilleureSolution.print(System.out);
 			m_solution=meilleureSolution;
-			//System.out.println("la solution m_solution");
-			//m_solution.evaluate();
-			//m_solution.print(System.out);
 			tempspasse = System.currentTimeMillis()-t;
 		}
 	}
