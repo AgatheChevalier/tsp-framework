@@ -3,27 +3,22 @@ package tsp;
 public class Fourmi {
 	
 	/*private int pos_depart;		
-	//position initiale de la fourmi k
-	private int position; 		
-	//position à l'instant t
-	private int[] memoire;		
-	//liste des villes visitées par la fourmi
 	private double[][] qte_pheromone;	
-	//quantité de phéromones laissé par la fourmi sur chaque arc
+	//quantite de pheromones laissee par la fourmi sur chaque arc
 	
 	*/
-	private int[] memoire ;		//liste  mémoire associée à une fourmi
-	private int[] villesAVisiter ; 	//liste des villes à visiter à l'instant t
+	private int[] memoire ;		//liste  memoire associee a� une fourmi
+	private int[] villesAVisiter ; 	//liste des villes a� visiter a� l'instant t
 	private Instance m_instance;
 	
-	//paramètres en lien avec les phéromones
-	private double alpha;	//paramètre relatif à  l'évaporation des phéromones
-	private double beta;	//paramètre relatif à la visibilité des villes
-	private double rho;		//taux d'évaporation des phéromones compris entre 0 et 1
+	//parametres en lien avec les pheromones
+	private double alpha;	//parametre relatif à  l'evaporation des pheromones
+	private double beta;	//parametre relatif à la visibilite des villes
+	private double rho;		//taux d'evaporation des pheromones compris entre 0 et 1
 	private double Lk; 		//Longueur de l'arc parcouru par la fourmi k lors dans l'intervalle de temps [t;t+n]
-	private double[][] tau;	//matrice des phéromones sur les arcs
+	private double[][] tau;	//matrice des pheromones sur les arcs
 	
-	public Fourmi(int[] memoire, int[] aVisiter) {
+	public Fourmi(int[] memoire, int[] aVisiter) { //constructeur
 		super();
 		this.memoire = memoire;
 		this.villesAVisiter = aVisiter;
@@ -37,18 +32,18 @@ public class Fourmi {
 		return 1/distance(i, j);
 	}
 	
-	public double probabilite(int i, int j) throws Exception { //probabilité de choisir la ville j en partant de la ville i : 
+	public double probabilite(int i, int j) throws Exception { //probabilite de choisir la ville j en partant de la ville i : 
 		double p = 0;
 		if ( this.villesAVisiter.length == 1) {
-			//si la fourmi a visité toutes les villes sauf la ville de départ :
+			//si la fourmi a visite toutes les villes sauf la ville de depart :
 			p = 1;
 		}
 		else if (this.memoire.length == 0) { 	
-			//si la fourmi a déjà fait un tour complet :
+			//si la fourmi a deja� fait un tour complet :
 			p=0;
 		} else {		
-			// s'il reste des villes à visiter :
-			// on constrit la somme des produits tau*eta pour l'ensemble des villes restantes (i.e. produit de (qté de phéromones)*(visibilité) pour l'arc (i,l)) :
+			// s'il reste des villes a visiter :
+			// on constrit la somme des produits tau*eta pour l'ensemble des villes restantes (i.e. produit de (qte de pheromones)*(visibilite) pour l'arc (i,l)) :
 			double tau_eta = 0;
 			for (int l : villesAVisiter) {
 				tau_eta += Math.pow(tau[i][l], alpha)*Math.pow(visibilite(i, l), beta);
@@ -59,42 +54,41 @@ public class Fourmi {
 		return p;
 	}
 	
-	public int villeSuivante(int villeDeDepart) throws Exception { // la fourmi choisit la ville de probabilité la plus élevée :
+	public int villeSuivante(int villeDeDepart) throws Exception { // la fourmi choisit la ville de probabilite la plus elevee :
 		int size = memoire.length;
-		if (this.villesAVisiter.length >= 1) { //si elle n'a pas encore visité toutes les villes :
-			int[] copieMemoire = new int[size+1];	// on cherche à mettre à jour la mémoire de la fourmi : on va ajouter une case pour y entrer la ville suivante
+		if (this.villesAVisiter.length >= 1) { //si elle n'a pas encore visite toutes les villes :
+			int[] copieMemoire = new int[size+1];	// on cherche a� mettre a� jour la memoire de la fourmi : on va ajouter une case pour y entrer la ville suivante
 			for (int m=0; m<size; m++) {
 				copieMemoire[m] = memoire[m];
 			}
-			if ( this.villesAVisiter.length == 1) {	//1er cas : s'il ne reste à la fourmi qu'à revenir à la ville de départ :
+			if ( this.villesAVisiter.length == 1) {	//1er cas : s'il ne reste a� la fourmi qu'a� revenir a� la ville de depart :
 				memoire[size]=0;
-			} else if ( this.villesAVisiter.length > 1 ) { //s'il reste plus qu'une ville à visiter : 
+			} else if ( this.villesAVisiter.length > 1 ) { //s'il reste plus qu'une ville a� visiter : 
 					double p=0;	
 					int index=0;
-					//on va comparer les probabilités
+					//on va comparer les probabilites
 					for (int l : villesAVisiter) {
 						if (probabilite(villeDeDepart,l)>p) {
 							p=probabilite(villeDeDepart,l);
 							index=l;
 						} else if (probabilite(villeDeDepart,l)==p) { 
-							// cas où deux villes possèdent une même probabilité, on choisit celle ou la quantite de pheromones est la plus grande
+							// cas ou deux villes possedent une meme probabilite�, on choisit celle ou la quantite de pheromones est la plus grande
 							
 						}
 					}
 					memoire[size]=index;
 			}
 		}
-		return memoire[size];	//on retourne la ville suivante et la liste "memoire" est actualisée
+		return memoire[size];	//on retourne la ville suivante et la liste "memoire" est actualisee
 	}
 	
-	public long distance_totale (int position_init) throws Exception {
+	public double distance_totale (int position_init) throws Exception {
 		int i = 0;
-		long d_tot = 0;
+		double d_tot = 0;
 		while (i<this.memoire.length) {
 			d_tot += distance(memoire[i], memoire[i+1]);
 			i++;
 		}
 		return d_tot;
 	}
-
 }
