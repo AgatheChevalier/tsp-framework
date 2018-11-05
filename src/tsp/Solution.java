@@ -288,20 +288,23 @@ public class Solution {
 		return m_cities;
 	}
 	
-	/** Cette méthode calcule le coût d'un trajet en appelant la méthode getTour() de la classe Solution. 
+	/** 
+	 * Cette méthode calcule le coût d'un trajet en appelant la méthode evaluate() de la classe Solution. 
+	 * Nous est surtout utile pour "renommer" evaluate() et avoir un algorithme plus clair à nos yeux.
+	 * 
 	 * @throws Exception
-	 * @version 2 (19/10/2018)
 	 * */
 	public double getCout() throws Exception {
-	/*	int res = 0;
-		for(int i=0; i<m_cities.length-1; i++) {
-			res = res + (int)(m_instance.getDistances(m_cities[i], m_cities[i+1]));
-		}
-		res = res+(int)(m_instance.getDistances(m_cities[m_cities.length-1], m_cities[0]));
-		return res; */
 		return evaluate();
 	}	
 	
+	/**
+	 * Cette méthode vérifie si le circuit contient la ville demandée.
+	 * 
+	 * @param Ville La ville dont on veut vérifier la présence. 
+	 * @return Un booléen: true si la ville est présente et false sinon. 
+	 * @throws Exception
+	 */
 	public boolean contains(int Ville) throws Exception {
 		boolean trouve = false;
 		int compt=0;
