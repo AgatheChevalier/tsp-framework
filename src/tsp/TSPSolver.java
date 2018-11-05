@@ -70,14 +70,14 @@ public class TSPSolver {
 	public void solve() throws Exception
 	{
 		localSearchPPV();
+		/**DeuxOpt();
 		DeuxOpt();
 		DeuxOpt();
 		DeuxOpt();
 		DeuxOpt();
 		DeuxOpt();
 		DeuxOpt();
-		DeuxOpt();
-		DeuxOpt();
+		DeuxOpt();/*
 		/*double anciencout=m_solution.evaluate();
 		DeuxOpt();
 		while(m_solution.evaluate()<anciencout) {
@@ -101,7 +101,7 @@ public class TSPSolver {
 		DeuxOpt();
 */
 		//System.out.println(generateSolutionRandom().isFeasible());
-		//GeneticAlgorithm();
+		GeneticAlgorithm();
 		//Solution sol = generateSolutionRandom();
 		//for (int i=0; i<m_instance.getNbCities(); i++) {
 		//	System.out.println(sol.contains(i));
@@ -350,6 +350,8 @@ public class TSPSolver {
 	public Solution[] evolution(Solution[] population, int tailleTournoi, double tauxMutation) throws Exception {
 		Solution[] nouvelle_pop = new Solution[population.length];
 		nouvelle_pop[0] = getBestFitness(population); // On enregistre le meilleur circuit de notre ancienne population
+		System.out.println("meilleur de la pop");
+		nouvelle_pop[0].print(System.out);
 		for(int i=1; i<nouvelle_pop.length; i++) {
 			Solution parent1 = tournoi(population,tailleTournoi);
 			Solution parent2 = tournoi(population,tailleTournoi);
@@ -360,15 +362,15 @@ public class TSPSolver {
 			nouvelle_pop[i] = enfant;	
 			
 		} 
-		for(int i=0; i<nouvelle_pop.length; i++) {
+		for(int i=1; i<nouvelle_pop.length; i++) {
 			muter(nouvelle_pop[i], tauxMutation);
 		}
-		/**System.out.println("la génération suivante :");
+		System.out.println("la génération suivante :");
 		for (int i=0; i<nouvelle_pop.length; i++) {
 			System.out.println("individu"+i);
 			nouvelle_pop[i].evaluate();
 			nouvelle_pop[i].print(System.out);
-		}*/
+		}
 		return nouvelle_pop;
 	}
 	
@@ -482,8 +484,8 @@ public class TSPSolver {
 		long tempspasse = 0;
 		int compt=0;
 		while(tempspasse<m_timeLimit) {
-			Solution[] populationMere = generatePopulation(1500);
-			for(int i=0; i<5000; i++) { // correspond au nombre de générations que l'on fait
+			Solution[] populationMere = generatePopulation(10);
+			for(int i=0; i<10; i++) { // correspond au nombre de générations que l'on fait
 				Solution[] populationFille = evolution(populationMere, tailleTournoi, tauxMutation);
 				populationMere = populationFille;
 				compt++;
