@@ -70,11 +70,11 @@ public class TSPSolver {
 	public void solve() throws Exception
 	{
 		localSearchPPV();
-		//m_solution.print(System.out);
+		m_solution.print(System.out);
 		DeuxOpt();
-		//m_solution.print(System.out);
+		m_solution.print(System.out);
 		GeneticAlgorithm();
-		DeuxOpt();
+		m_solution.print(System.out);
 		double anciencout = m_solution.evaluate();
 		System.out.println(anciencout);
 		while (DeuxOpt().evaluate()<anciencout) {
@@ -237,6 +237,7 @@ public class TSPSolver {
 		        amelioration ++;
 		        tempspasse = System.currentTimeMillis()-t;
 		}
+		m_solution.evaluate();
 		soldepart=m_solution.copy();
 		return soldepart;
 	}
