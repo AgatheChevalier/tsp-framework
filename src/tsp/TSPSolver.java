@@ -70,15 +70,19 @@ public class TSPSolver {
 	public void solve() throws Exception
 	{
 		localSearchPPV();
-		m_solution.print(System.out);
+		//m_solution.print(System.out);
 		DeuxOpt();
-		m_solution.print(System.out);
+		//m_solution.print(System.out);
 		GeneticAlgorithm();
 		DeuxOpt();
-		DeuxOpt();
-		DeuxOpt();
-		DeuxOpt();
-		DeuxOpt();
+		double anciencout = m_solution.evaluate();
+		System.out.println(anciencout);
+		while (DeuxOpt().evaluate()<anciencout) {
+			DeuxOpt();
+			System.out.println("nouveau deuxOpt");
+			anciencout=m_solution.evaluate();
+			System.out.println(anciencout);
+		}
 		
 		/*double anciencout=m_solution.evaluate();
 		DeuxOpt();
