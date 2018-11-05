@@ -70,7 +70,14 @@ public class TSPSolver {
 	public void solve() throws Exception
 	{
 		localSearchPPV();
-		
+		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
 		/*double anciencout=m_solution.evaluate();
 		DeuxOpt();
 		while(m_solution.evaluate()<anciencout) {
@@ -225,6 +232,10 @@ public class TSPSolver {
 		        tempspasse = System.currentTimeMillis()-t;
 		}	 
 	}
+	
+
+		
+	
 
 	/**
 	 * Méthode qui échange deux villes dans une solution selon le schéma que l'on a choisi. 
