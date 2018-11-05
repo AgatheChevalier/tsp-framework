@@ -225,7 +225,7 @@ public class Instance {
 			m_x[i] = 0;
 			m_x[i] = 0;
 			m_labels[i] = Integer.toString(i);
-		}
+		} 
 		
 		line = sc.nextLine();
 		// Compute distances
@@ -351,14 +351,14 @@ public class Instance {
 	 */
 	public void print(PrintStream out) {
 
-		out.println("Distance matrix:");
+/*		out.println("Distance matrix:");
 		for (int i = 0; i < m_nbCities; i++) {
 			for (int j = 0; j < m_nbCities; j++) {
 				out.print(m_distances[i][j] + ";");
 			}
 			out.println();
 		}
-		out.println();
+		out.println();  */
 	}
 
 	// -----------------------------
