@@ -80,7 +80,6 @@ public class TSPSolver {
 		DeuxOpt();
 		DeuxOpt();
 		
-		
 		/*double anciencout=m_solution.evaluate();
 		DeuxOpt();
 		while(m_solution.evaluate()<anciencout) {
