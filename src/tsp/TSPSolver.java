@@ -500,8 +500,12 @@ public class TSPSolver {
 	// ----- ALGORITHME FOURMI -----
 	// -----------------------------
 	
+	/**
+	 * Méthode non terminée qui devait être la méthode déroulant tout le processus de l'algorithme des fourmis.
+	 * 
+	 * @throws Exception
+	 */
 	public void algoFourmi() throws Exception {
-		
 	}
 
 	// -----------------------------
