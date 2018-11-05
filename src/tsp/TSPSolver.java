@@ -71,15 +71,15 @@ public class TSPSolver {
 	{
 		localSearchPPV();
 		m_solution.print(System.out);
+		DeuxOpt();
+		m_solution.print(System.out);
 		GeneticAlgorithm();
-		/**DeuxOpt();
 		DeuxOpt();
 		DeuxOpt();
 		DeuxOpt();
 		DeuxOpt();
 		DeuxOpt();
-		DeuxOpt();
-		DeuxOpt();/*
+		
 		/*double anciencout=m_solution.evaluate();
 		DeuxOpt();
 		while(m_solution.evaluate()<anciencout) {
@@ -207,8 +207,8 @@ public class TSPSolver {
 	 *
 	 * @throws Exception
 	 */
-	public void DeuxOpt() throws Exception {
-		m_solution.print(System.err);
+	public Solution DeuxOpt() throws Exception {
+		Solution soldepart = new Solution(m_instance);
 		long t = System.currentTimeMillis();
 		long tempspasse = 0;
 		int size = m_instance.getNbCities();   
@@ -232,7 +232,9 @@ public class TSPSolver {
 		        }		 
 		        amelioration ++;
 		        tempspasse = System.currentTimeMillis()-t;
-		}	 
+		}
+		soldepart=m_solution.copy();
+		return soldepart;
 	}
 	
 
@@ -290,8 +292,6 @@ public class TSPSolver {
 			compt++;
 		}
 		m_sol.setCityPosition(0, m_instance.getNbCities());
-		//System.out.println("Solution random : ");
-		//m_solution.print(System.err);
 		return m_sol;
 	}
 	
@@ -304,7 +304,7 @@ public class TSPSolver {
 	 */
 	public Solution[] generatePopulation(int taille_pop) throws Exception{
 		Solution[] s = new Solution[taille_pop];
-		s[0]=localSearchPPV(); //bonne solution au début pour converger plus vite
+		s[0]=DeuxOpt(); //bonne solution au début pour converger plus vite
 		for(int i=1; i<s.length; i++) {
 			s[i]=generateSolutionRandom();
 			/**System.out.println("individu "+i);
@@ -484,8 +484,8 @@ public class TSPSolver {
 		long tempspasse = 0;
 		int compt=0;
 		while(tempspasse<m_timeLimit) {
-			Solution[] populationMere = generatePopulation(2000);
-			for(int i=0; i<500; i++) { // correspond au nombre de générations que l'on fait
+			Solution[] populationMere = generatePopulation(100);
+			for(int i=0; i<1000; i++) { // correspond au nombre de générations que l'on fait
 				Solution[] populationFille = evolution(populationMere, tailleTournoi, tauxMutation);
 				populationMere = populationFille;
 				compt++;
