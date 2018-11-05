@@ -461,6 +461,13 @@ public class TSPSolver {
 			tempspasse = System.currentTimeMillis()-t;
 		}
 	}
+	// -----------------------------
+	// ----- ALGORITHME FOURMI -----
+	// -----------------------------
+	
+	public void algoFourmi() throws Exception {
+		
+	}
 
 	// -----------------------------
 	// ----- GETTERS / SETTERS -----
