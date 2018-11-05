@@ -6,10 +6,21 @@ public class Pheromones {
 	private double[][] tau;		//matrice des pheromones sur les arcs
 	private Fourmi[] fourmis; 	//liste de fourmis
 	
+	/** 
+	 * Contructeur de la classe Pheromones.
+	 * 
+	 * @param tau La matrice des différentes phéromones disposées sur les arcs 
+	 */
 	public Pheromones(double[][] tau) {
 		this.tau= tau;
 	}
 	
+	/**
+	 * Initialise la matrices de phéromones. 
+	 * 
+	 * @return La matrice de phéromones initialisée
+	 * @throws Exception
+	 */
 	public double[][] depotPheromones() throws Exception{
 		double[][] deltaTau = new double[this.tau.length][];	//matrice des quantites de pheromones deposes par l'ensemble des fourmis sur chaque arc
 		for (int i=0; i<this.tau.length; i++) {		
@@ -24,7 +35,14 @@ public class Pheromones {
 		}
 		return deltaTau;
 	}
-
+	
+	
+	/**
+	 * Méthode de mise à jour de la matrice des phéronomnes.
+	 * 
+	 * @return La matrice des phéromones mise à jour
+	 * @throws Exception
+	 */
 	public double[][] majPheromones() throws Exception{
 		double[][] deltaTau = this.depotPheromones();
 		for (int i=0; i<this.tau.length; i++) {
