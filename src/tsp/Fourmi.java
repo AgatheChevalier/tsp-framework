@@ -2,8 +2,8 @@ package tsp;
 
 public class Fourmi {
 	
-	private int[] memoire ;		//liste  memoire associee a  une fourmi
-	private int[] villesAVisiter ; 	//liste des villes a  visiter a  l'instant t
+	private int[] memoire ;		//liste  memoire associee Ã  une fourmi
+	private int[] villesAVisiter ; 	//liste des villes Ã  visiter Ã  l'instant t
 	private Instance m_instance;
 	
 	//parametres en lien avec les pheromones
@@ -13,6 +13,12 @@ public class Fourmi {
 	private double Lk; 		//Longueur de l'arc parcouru par la fourmi k lors dans l'intervalle de temps [t;t+n]
 	private double[][] tau;	//matrice des pheromones sur les arcs
 	
+	/**
+	 * Constructeur pour crÃ©er une fourmi
+	 * 
+	 * @param memoire L
+	 * @param aVisiter
+	 */
 	public Fourmi(int[] memoire, int[] aVisiter) { //constructeur
 		super();
 		this.memoire = memoire;
@@ -34,7 +40,7 @@ public class Fourmi {
 			p = 1;
 		}
 		else if (this.memoire.length == 0) { 	
-			//si la fourmi a deja  fait un tour complet :
+			//si la fourmi a dejaï¿½ fait un tour complet :
 			p=0;
 		} else {		
 			// s'il reste des villes a visiter :
@@ -52,13 +58,13 @@ public class Fourmi {
 	public int villeSuivante(int villeDeDepart) throws Exception { // la fourmi choisit la ville de probabilite la plus elevee :
 		int size = this.memoire.length;
 		if (this.villesAVisiter.length >= 1) { //si elle n'a pas encore visite toutes les villes :
-			int[] copieMemoire = new int[size+1];	// on cherche a  mettre a  jour la memoire de la fourmi : on va ajouter une case pour y entrer la ville suivante
+			int[] copieMemoire = new int[size+1];	// on cherche aï¿½ mettre aï¿½ jour la memoire de la fourmi : on va ajouter une case pour y entrer la ville suivante
 			for (int m=0; m<size; m++) {
 				copieMemoire[m] = this.memoire[m];
 			}
-			if ( this.villesAVisiter.length == 1) {	//1er cas : s'il ne reste a  la fourmi qu'a  revenir a  la ville de depart :
+			if ( this.villesAVisiter.length == 1) {	//1er cas : s'il ne reste aï¿½ la fourmi qu'aï¿½ revenir aï¿½ la ville de depart :
 				copieMemoire[size]=0;
-			} else if ( this.villesAVisiter.length > 1 ) { //s'il reste plus qu'une ville a  visiter : 
+			} else if ( this.villesAVisiter.length > 1 ) { //s'il reste plus qu'une ville aï¿½ visiter : 
 					double p=0;	
 					int index=0;
 					//on va comparer les probabilites
