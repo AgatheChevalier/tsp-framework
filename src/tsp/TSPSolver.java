@@ -70,9 +70,31 @@ public class TSPSolver {
 	public void solve() throws Exception
 	{
 		localSearchPPV();
-		//DeuxOpt();
+		
+		/*double anciencout=m_solution.evaluate();
+		DeuxOpt();
+		while(m_solution.evaluate()<anciencout) {
+			anciencout=m_solution.evaluate();
+			DeuxOpt();
+		}
+
+		Solution newm_solution=m_solution.copy();
+		int nbVilles=m_instance.getNbCities();
+		Random random=new Random();
+		int start = 1 + random.nextInt((nbVilles/2)-1); 
+		int end = (nbVilles/2) + random.nextInt((nbVilles-1) - (nbVilles/2));
+		swap(start,end,newm_solution);
+		m_solution=newm_solution;
+		DeuxOpt();
+		DeuxOpt();		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
+		DeuxOpt();
+*/
 		//System.out.println(generateSolutionRandom().isFeasible());
-		GeneticAlgorithm();
+		//GeneticAlgorithm();
 		//Solution sol = generateSolutionRandom();
 		//for (int i=0; i<m_instance.getNbCities(); i++) {
 		//	System.out.println(sol.contains(i));
